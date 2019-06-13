@@ -1,0 +1,25 @@
+apiVersion: "openstack.stable.sap.cc/v1"
+kind: "OpenstackSeed"
+metadata:
+  name: logstash-swift-seed
+spec:
+  requires:
+  - swift/swift-seed
+  - monsoon3/domain-ccadmin-seed
+  - monsoon3/domain-default-seed
+
+  domains:
+    - name: ccadmin
+      projects:
+      - name: master
+        roles:
+          - user: hermes@Default
+            role: swiftoperator
+        swift:
+          enabled: true
+          containers:
+          - name: hermes
+            metadata:
+              meta-web-listings: 'true'
+              meta-web-listings-label: logstashArchive
+              read: .4:*,.rlistings
