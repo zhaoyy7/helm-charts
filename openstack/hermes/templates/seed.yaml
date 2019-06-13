@@ -22,4 +22,4 @@ spec:
             metadata:
               meta-web-listings: 'true'
               meta-web-listings-label: logstashArchive
-              read: .4:*,.rlistings
+              read: .r:*,.rlistings
