@@ -23,3 +23,8 @@ spec:
               meta-web-listings: 'true'
               meta-web-listings-label: logstashArchive
               read: .r:*,.rlistings
+        ec2_creds:
+          - user: hermes
+            user_domain: Default
+            access: 022AB06E7MXBSH9DHM02
+            key: pWculUX4JEDGM/LtmEENI/aVmYvHNif5zB+d9+ct
