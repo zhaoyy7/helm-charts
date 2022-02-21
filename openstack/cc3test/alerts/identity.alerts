@@ -119,16 +119,16 @@ groups:
         cc3test_status{type="datapath",
             name=~"TestLdap_ews_datapath.+"
         } == 0
-    for: 15m
+    for: 5m
     labels:
-      severity: info
+      severity: critical
       tier: os
       service: 'active_dir'
       context: 'active_dir'
-      meta: 'SAP https://autodiscover.sap.com/ews/healthcheck.htm reports down'
+      meta: 'SAP https://accounts.sap.com/service/users/password reports down'
       dashboard: 'cc3test-overview?var-service={{ $labels.service }}'
       playbook: 'docs/devops/alert/keystone/#ldap_fail'
       report: 'cc3test/admin/object-storage/containers/cc3test/list/reports/{{ $labels.type }}'
     annotations:
       description: 'SAP Exchange webservice is not healthy. Usually due to lacking internet connectivity. Password updates will fail.'
-      summary: 'SAP https://autodiscover.sap.com/ews/healthcheck.htm reports down'
+      summary: 'SAP https://accounts.sap.com/service/users/password reports down'
