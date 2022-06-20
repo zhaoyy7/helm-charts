@@ -22,8 +22,6 @@ spec:
     metadata:
       labels:
         app: {{ template "fullname" . }}
-      annotations:
-        checksum/container.init: {{ include (print $.Template.BasePath "/bin-configmap.yaml") . | sha256sum }}
     spec:
       affinity:
         nodeAffinity:
@@ -47,9 +45,7 @@ spec:
         image: "{{include "dockerHubMirror" .}}/{{ .Values.image }}:{{.Values.imageTag }}"
         imagePullPolicy: {{ default "IfNotPresent" .Values.imagePullPolicy | quote }}
         command:
-          - bash
-        args:
-          - /container.init/rabbitmq-start
+        - rabbitmq-server
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           exec:
@@ -80,10 +76,8 @@ spec:
           - name: management
             containerPort: {{ default "15672" .Values.ports.management }}
         volumeMounts:
-          - mountPath: /var/lib/rabbitmq
-            name: rabbitmq-persistent-storage
-          - mountPath: /container.init
-            name: container-init
+          - name: rabbitmq-persistent-storage
+            mountPath: /var/lib/rabbitmq
 {{- if .Values.metrics.enabled }}
       - name: metrics
         image: {{include "dockerHubMirror" .}}/{{ .Values.metrics.image }}:{{ .Values.metrics.imageTag }}
@@ -109,9 +103,6 @@ spec:
         - name: rabbitmq-persistent-storage
           emptyDir: {}
       {{- end }}
-        - name: container-init
-          configMap:
-            name: {{ template "fullname" . }}-bin
   {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
   - metadata:
