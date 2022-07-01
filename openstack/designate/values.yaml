@@ -102,12 +102,22 @@ percona_cluster:
   db_name: designate
   db_user: designate
 
+proxysql:
+  mode: unix_socket
+
 mariadb:
   enabled: true
   name: designate
   initdb_configmap: designate-initdb
   persistence_claim:
     name: db-designate-pvclaim
+  databases:
+  - designate
+  users:
+    designate:
+      name: designate
+      grants:
+      - "ALL PRIVILEGES on designate.*"
   backup:
     enabled: false
   backup_v2:
