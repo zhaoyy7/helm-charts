@@ -1,5 +1,5 @@
 {{- if .Values.sentry.cleanup.enabled }}
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ template "fullname" . }}-sentry-cleanup
@@ -24,15 +24,9 @@ spec:
             checksum/configYml: {{ .Values.config.configYml | toYaml | toString | sha256sum }}
             checksum/sentryConfPy: {{ .Values.config.sentryConfPy | sha256sum }}
             checksum/config.yaml: {{ include (print $.Template.BasePath "/configmap-sentry.yaml") . | sha256sum }}
-            {{- if .Values.sentry.cleanup.annotations }}
-{{ toYaml .Values.sentry.cleanup.annotations | indent 12 }}
-            {{- end }}
           labels:
             app: {{ template "fullname" . }}
             release: "{{ .Release.Name }}"
-            {{- if .Values.sentry.cleanup.podLabels }}
-{{ toYaml .Values.sentry.cleanup.podLabels | indent 12 }}
-            {{- end }}
         spec:
           containers:
           - name: {{ .Chart.Name }}-sentry-cleanup
