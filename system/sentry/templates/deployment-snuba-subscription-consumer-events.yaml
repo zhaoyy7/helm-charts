@@ -43,7 +43,7 @@ spec:
       containers:
       - name: {{ .Chart.Name }}-snuba
         image: "{{ template "snuba.image" . }}"
-        imagePullPolicy: {{ default "IfNotPresent" .Values.images.snuba.pullPolicy }}
+        imagePullPolicy: {{ default "IfNotPresent" .Values.image.snuba.pullPolicy }}
         command:
           - "snuba"
           - "subscriptions-scheduler-executor"
@@ -72,9 +72,6 @@ spec:
           readOnly: true
         resources:
 {{ toYaml .Values.snuba.subscriptionConsumerEvents.resources | indent 12 }}
-      {{- if .Values.serviceAccount.enabled }}
-      serviceAccountName: {{ .Values.serviceAccount.name }}-snuba
-      {{- end }}
       volumes:
         - name: config
           configMap:

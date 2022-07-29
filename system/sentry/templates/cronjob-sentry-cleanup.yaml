@@ -37,7 +37,7 @@ spec:
           containers:
           - name: {{ .Chart.Name }}-sentry-cleanup
             image: "{{ template "sentry.image" . }}"
-            imagePullPolicy: {{ default "IfNotPresent" .Values.images.sentry.pullPolicy }}
+            imagePullPolicy: {{ default "IfNotPresent" .Values.image.sentry.pullPolicy }}
             command: ["sentry"]
             args:
               - "cleanup"
@@ -45,3 +45,4 @@ spec:
               - "{{ .Values.sentry.cleanup.days }}"
             env:
 {{ include "env-vars" . | indent  10 }}
+{{- end }}

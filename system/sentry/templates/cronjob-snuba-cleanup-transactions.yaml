@@ -36,7 +36,7 @@ spec:
           containers:
           - name: {{ .Chart.Name }}-snuba-cleanup-errors
             image: "{{ template "snuba.image" . }}"
-            imagePullPolicy: {{ default "IfNotPresent" .Values.images.snuba.pullPolicy }}
+            imagePullPolicy: {{ default "IfNotPresent" .Values.image.snuba.pullPolicy }}
             command:
                 - "snuba"
                 - "cleanup"
@@ -74,10 +74,4 @@ spec:
 {{- if .Values.snuba.cleanupTransactions.volumes }}
 {{ toYaml .Values.snuba.cleanupTransactions.volumes | indent 10 }}
 {{- end }}
-          {{- if .Values.snuba.cleanupTransactions.priorityClassName }}
-          priorityClassName: "{{ .Values.snuba.cleanupTransactions.priorityClassName }}"
-          {{- end }}
-          {{- if .Values.snuba.cleanupTransactions.serviceAccount }}
-          serviceAccountName: {{ .Values.snuba.cleanupTransactions.serviceAccount.name }}
-          {{- end }}
 {{- end }}

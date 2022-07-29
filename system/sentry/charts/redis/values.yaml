@@ -3,7 +3,7 @@
 ##
 image:
   repository: library/redis
-  tag: 7.0.0-alpine
+  tag: 6.2.4-alpine
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'

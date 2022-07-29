@@ -15,9 +15,6 @@ spec:
       app: {{ template "fullname" . }}
       release: "{{ .Release.Name }}"
       role: symbolicator-api
-{{- if not .Values.symbolicator.api.autoscaling.enabled }}
-  replicas: {{ .Values.symbolicator.api.replicas }}
-{{- end }}
   template:
     metadata:
       annotations:
@@ -36,7 +33,7 @@ spec:
       containers:
       - name: {{ .Chart.Name }}-symbolicator
         image: "{{ template "symbolicator.image" . }}"
-        imagePullPolicy: {{ default "IfNotPresent" .Values.images.symbolicator.pullPolicy }}
+        imagePullPolicy: {{ default "IfNotPresent" .Values.image.symbolicator.pullPolicy }}
         args: ["run", "-c", "/etc/symbolicator/config.yml"]
         ports:
         - containerPort: {{ template "symbolicator.port" }}
@@ -62,3 +59,4 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 2
+  {{- end }}
