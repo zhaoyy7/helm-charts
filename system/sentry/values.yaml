@@ -36,15 +36,15 @@ owner-info:
 image:
   sentry:
     repository: getsentry/sentry
-    tag: 21.5.0
+    tag: 22.7.0
     pullPolicy: IfNotPresent
   snuba:
     repository: getsentry/snuba
-    tag: 21.5.0
+    tag: 22.7.0
     pullPolicy: IfNotPresent
   relay:
     repository: getsentry/relay
-    tag: 21.5.0
+    tag: 22.7.0
     pullPolicy: IfNotPresent
   symbolicator:
     repository: getsentry/symbolicator
@@ -58,7 +58,7 @@ sentry:
     failedJobsHistoryLimit: 5
     activeDeadlineSeconds: 100
     concurrencyPolicy: Allow
-    enabled: true
+    enabled: false
     schedule: "0 0 * * *"
     days: 90
   features:
