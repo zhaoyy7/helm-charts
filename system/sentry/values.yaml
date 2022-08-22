@@ -82,7 +82,8 @@ relay:
   probePeriodSeconds: 10
   probeSuccessThreshold: 1
   probeTimeoutSeconds: 2
-
+  sidecars: []
+  volumes: []
 
 geodata:
   path: ""

@@ -41,8 +41,8 @@ spec:
     spec:
       initContainers:
         - name: {{ .Chart.Name }}-relay-init
-          image: "{{ template "relay.image" . }}"
-          imagePullPolicy: {{ default "IfNotPresent" .Values.image.sentry.pullPolicy }}
+          image: "{{required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/{{ .Values.image.relay.repository }}:{{required ".Values.image.relay.tag is missing" .Values.image.relay.tag }}"
+          imagePullPolicy: {{ default "IfNotPresent" .Values.image.relay.pullPolicy }}
           args:
             - "credentials"
             - "generate"
@@ -52,10 +52,6 @@ spec:
           volumeMounts:
             - name: credentials
               mountPath: /work/.relay
-            - name: config
-              mountPath: /work/.relay/config.yml
-              subPath: config.yml
-              readOnly: true
       {{- if .Values.dnsPolicy }}
       dnsPolicy: {{ .Values.dnsPolicy | quote }}
       {{- end }}
@@ -65,8 +61,8 @@ spec:
       {{- end }}
       containers:
       - name: {{ .Chart.Name }}-relay
-        image: "{{ template "relay.image" . }}"
-        imagePullPolicy: {{ default "IfNotPresent" .Values.image.sentry.pullPolicy }}
+        image: "{{required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/{{ .Values.image.relay.repository }}:{{required ".Values.image.relay.tag is missing" .Values.image.relay.tag }}"
+        imagePullPolicy: {{ default "IfNotPresent" .Values.image.relay.pullPolicy }}
         ports:
         - containerPort: {{ template "relay.port" }}
         env:
@@ -78,10 +74,6 @@ spec:
         volumeMounts:
           - name: credentials
             mountPath: /work/.relay
-          - name: config
-            mountPath: /work/.relay/config.yml
-            subPath: config.yml
-            readOnly: true
           {{- if .Values.geodata.volumeName }}
           - name: {{ .Values.geodata.volumeName }}
             mountPath: {{ .Values.geodata.mountPath }}
@@ -106,4 +98,9 @@ spec:
           periodSeconds: {{ .Values.relay.probePeriodSeconds }}
           successThreshold: {{ .Values.relay.probeSuccessThreshold }}
           timeoutSeconds: {{ .Values.relay.probeTimeoutSeconds }}
-
+      volumes:
+      - name: credentials
+        emptyDir: {}
+{{- if .Values.relay.volumes }}
+{{ toYaml .Values.relay.volumes | indent 6 }}
+{{- end }}

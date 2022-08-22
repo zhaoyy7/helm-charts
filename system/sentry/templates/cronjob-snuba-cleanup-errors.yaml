@@ -35,7 +35,7 @@ spec:
         spec:
           containers:
           - name: {{ .Chart.Name }}-snuba-cleanup-errors
-            image: "{{ template "snuba.image" . }}"
+            image: "{{required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/{{ .Values.image.snuba.repository }}:{{required ".Values.image.snuba.tag is missing" .Values.image.snuba.tag }}"
             imagePullPolicy: {{ default "IfNotPresent" .Values.image.snuba.pullPolicy }}
             command:
                 - "snuba"
@@ -57,21 +57,4 @@ spec:
             envFrom:
                 - secretRef:
                       name: {{ template "fullname" . }}-snuba-env
-            volumeMounts:
-                - mountPath: /etc/snuba
-                  name: config
-                  readOnly: true
-            resources:
-{{ toYaml .Values.snuba.cleanupErrors.resources | indent 14 }}
-{{- if .Values.snuba.cleanupErrors.sidecars }}
-{{ toYaml .Values.snuba.cleanupErrors.sidecars | indent 10 }}
-{{- end }}
-          restartPolicy: Never
-          volumes:
-            - name: config
-              configMap:
-                name: {{ template "fullname" . }}-snuba
-{{- if .Values.snuba.cleanupErrors.volumes }}
-{{ toYaml .Values.snuba.cleanupErrors.volumes | indent 10 }}
-{{- end }}
 {{- end }}

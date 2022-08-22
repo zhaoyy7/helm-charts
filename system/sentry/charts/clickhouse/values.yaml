@@ -61,7 +61,6 @@ clickhouse:
   metrics:
     enabled: false
     image:
-      registry: docker.io
       repository: f1yegor/clickhouse-exporter
       tag: latest
       pullPolicy: IfNotPresent
@@ -122,16 +121,17 @@ clickhouse:
   ## The instance number of Clickhouse
   replicas: "3"
   ## Clickhouse image configuration.
-  image: "yandex/clickhouse-server"
-  imageVersion: "19.14"
+  repository: "yandex/clickhouse-server"
+  tag: "19.14"
   imagePullPolicy: "IfNotPresent"
 
   ## The resource limits and requests used by clickhouse
   resources: {}
 
   init:
+    repository: "library/busybox"
     image: "busybox"
-    imageVersion: "1.31.0"
+    tag: "1.27"
     imagePullPolicy: "IfNotPresent"
   # imagePullSecrets:
   ## Periodic probe of container liveness. Container will be restarted if the probe fails. Cannot be updated.
@@ -391,10 +391,10 @@ tabix:
     maxUnavailable: 1
   ##
   ## Docker image name.
-  image: "spoonest/clickhouse-tabix-web-client"
+  repository: "spoonest/clickhouse-tabix-web-client"
   ##
   ## Docker image version
-  imageVersion: "stable"
+  tag: "stable"
   ##
   ## Image pull policy. One of Always, Never, IfNotPresent.
   ## Defaults to Always if :latest tag is specified, or IfNotPresent otherwise. Cannot be updated.

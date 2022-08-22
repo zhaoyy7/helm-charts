@@ -66,7 +66,7 @@ spec:
     {{- end }}
       initContainers:
       - name: init
-        image: {{ .Values.clickhouse.init.image }}:{{ .Values.clickhouse.init.imageVersion }}
+        image: "{{required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/{{ .Values.clickhouse.init.repository }}:{{required ".Values.clickhouse.init.tag is missing" .Values.clickhouse.init.tag }}"
         imagePullPolicy: {{ .Values.clickhouse.init.imagePullPolicy }}
         args:
         - /bin/sh
@@ -79,7 +79,7 @@ spec:
         {{- end }}
       containers:
       - name: {{ include "clickhouse.fullname" . }}
-        image: {{ .Values.clickhouse.image }}:{{ .Values.clickhouse.imageVersion }}
+        image: "{{required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/{{ .Values.clickhouse.repository }}:{{required ".Values.clickhouse.tag is missing" .Values.clickhouse.tag }}"
         imagePullPolicy: {{ .Values.clickhouse.imagePullPolicy }}
         command:
           - /bin/bash
@@ -133,7 +133,7 @@ spec:
       {{- end }}
       {{- if .Values.clickhouse.metrics.enabled }}
       - name: prom-exporter
-        image: "{{ .Values.clickhouse.metrics.image.registry }}/{{ .Values.clickhouse.metrics.image.repository }}:{{ .Values.clickhouse.metrics.image.tag }}"
+        image: "{{required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/{{ .Values.clickhouse.metrics.image.repository }}:{{required ".Values.clickhouse.metrics.image.repository is missing" .Values.clickhouse.metrics.image.tag }}"
         imagePullPolicy: {{ .Values.clickhouse.metrics.image.pullPolicy | quote }}
         ports:
           - name: metrics

@@ -42,7 +42,7 @@ spec:
     spec:
       containers:
       - name: {{ .Chart.Name }}-snuba
-        image: "{{ template "snuba.image" . }}"
+        image: "{{required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/{{ .Values.image.snuba.repository }}:{{required ".Values.image.snuba.tag is missing" .Values.image.snuba.tag }}"
         imagePullPolicy: {{ default "IfNotPresent" .Values.image.snuba.pullPolicy }}
         command:
           - "snuba"
@@ -91,19 +91,5 @@ spec:
         envFrom:
         - secretRef:
             name: {{ template "fullname" . }}-snuba-env
-        volumeMounts:
-        - mountPath: /etc/snuba
-          name: config
-          readOnly: true
-{{- if .Values.snuba.consumer.volumeMounts }}
-{{ toYaml .Values.snuba.consumer.volumeMounts | indent 8 }}
-{{- end }}
         resources:
 {{ toYaml .Values.snuba.consumer.resources | indent 12 }}
-      volumes:
-        - name: config
-          configMap:
-            name: {{ template "fullname" . }}-snuba
-{{- if .Values.snuba.consumer.volumes }}
-{{ toYaml .Values.snuba.consumer.volumes | indent 8 }}
-{{- end }}

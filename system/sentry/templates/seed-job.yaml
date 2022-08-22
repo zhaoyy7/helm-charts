@@ -17,7 +17,7 @@ spec:
             name: {{ template "fullname" . }}-seed
       containers:
       - name: job 
-        image: "{{required ".Values.global.registry is missing" .Values.global.registry }}/{{ .Values.image.sentry.repository }}:{{required ".Values.image.sentry.tag is missing" .Values.image.sentry.tag }}"
+        image: "{{required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/{{ .Values.image.sentry.repository }}:{{required ".Values.image.sentry.tag is missing" .Values.image.sentry.tag }}"
         command: ["sentry",  "exec", "/seed/seed.py"]
         volumeMounts:
           - mountPath: /seed
