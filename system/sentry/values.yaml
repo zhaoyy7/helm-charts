@@ -46,7 +46,7 @@ image:
     pullPolicy: IfNotPresent
   clickhouse:
     repository: yandex/clickhouse-server
-    tag: 194
+    tag: 19.4
     pullPolicy: IfNotPresent
   kafka:
     repository: confluentinc/cp-kafka
