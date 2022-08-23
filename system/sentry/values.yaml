@@ -29,24 +29,24 @@ organizationSlug: monsoon
 
 image:
   sentry:
-    repository: getsentry/sentry
-    tag: 22.7.0
+    repository: sentry
+    tag: 10.0.0
     pullPolicy: IfNotPresent
   snuba:
     repository: getsentry/snuba
-    tag: 22.7.0
+    tag: 10.0.0
     pullPolicy: IfNotPresent
-  relay:
-    repository: getsentry/relay
-    tag: 22.7.0
-    pullPolicy: IfNotPresent
+  # relay:
+  #   repository: getsentry/relay
+  #   tag: 10.0.0
+  #   pullPolicy: IfNotPresent
   symbolicator:
     repository: getsentry/symbolicator
     tag: 0.5.1
     pullPolicy: IfNotPresent
   clickhouse:
     repository: yandex/clickhouse-server
-    tag: 19.14
+    tag: 194
     pullPolicy: IfNotPresent
   kafka:
     repository: confluentinc/cp-kafka
@@ -55,6 +55,10 @@ image:
   zookeeper:
     repository: confluentinc/cp-zookeeper
     tag: 5.1.2
+    pullPolicy: IfNotPresent
+  void:
+    repository: alpine
+    tag: v20201119181236-v3.9
     pullPolicy: IfNotPresent
 
 service:

@@ -16,14 +16,8 @@ spec:
         alert-tier: os
         alert-service: sentry
     spec:
-      initContainers:
-      - name: "upgrade"
-        image: "{{required ".Values.global.registry is missing" .Values.global.registry }}/{{ .Values.image.sentry.repository }}:{{required ".Values.image.sentry.tag is missing" .Values.image.sentry.tag }}"
-        args: ["upgrade", "--noinput", "--lock"]
-        env:
-{{ include "env-vars" . | indent  10 }}
       containers:
-      - name: {{ .Chart.Name }}
+      - name: {{ .Chart.Name }}-web
         image: "{{required ".Values.global.registry is missing" .Values.global.registry }}/{{ .Values.image.sentry.repository }}:{{required ".Values.image.sentry.tag is missing" .Values.image.sentry.tag }}"
         args: [ run, web ]
         #command: [tail, -f, /dev/null]

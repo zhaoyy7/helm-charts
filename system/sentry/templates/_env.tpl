@@ -61,4 +61,14 @@
 - name: {{ $key | squote }}
   value: {{ $val | squote }}
 {{- end }}
+- name: SNUBA
+  value: 'http://snuba-api:1218'
+- name: SNUBA_SETTINGS
+  value: docker
+- name: CLICKHOUSE_HOST
+  value: clickhouse
+- name: CLICKHOUSE_PORT
+  value: "9000"
+- name: DEFAULT_BROKERS
+  value: sentry-kafka:9092
 {{ end }}

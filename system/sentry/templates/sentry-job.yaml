@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sentry-migration
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: snuba-bootstrap
+        image: "{{required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/{{ required ".Values.image.snuba.repository is missing" .Values.image.snuba.repository }}:{{ required ".Values.image.snuba.tag is missing" .Values.image.snuba.tag }}"
+        imagePullPolicy: {{ .Values.image.snuba.pullPolicy }}
+        args: ["bootstrap", "--force"]
+        env:
+{{ include "env-vars" . | indent  10 }}
+      - name: sentry-migration
+        image: "{{required ".Values.global.registry is missing" .Values.global.registry }}/{{ .Values.image.sentry.repository }}:{{required ".Values.image.sentry.tag is missing" .Values.image.sentry.tag }}"
+        imagePullPolicy: {{ .Values.image.sentry.pullPolicy }}
+        command: ["sh", "-c", "sentry upgrade --noinput || exit 0"]
+        env:
+{{ include "env-vars" . | indent  10 }}
+      - name: sentry-createuser
+        image: "{{required ".Values.global.registry is missing" .Values.global.registry }}/{{ .Values.image.sentry.repository }}:{{required ".Values.image.sentry.tag is missing" .Values.image.sentry.tag }}"
+        imagePullPolicy: {{ .Values.image.sentry.pullPolicy }}
+        command: ["sh", "-c", "sentry createuser --no-input --email {{ .Values.adminEmail }} --superuser --password {{ .Values.adminPassword }} || exit 0"]
+        env:
+{{ include "env-vars" . | indent  10 }}
+      containers:
+      - name: void
+        image: "{{required ".Values.global.registry is missing" .Values.global.registry }}/{{ .Values.image.void.repository }}:{{required ".Values.image.void.tag is missing" .Values.image.void.tag }}"
+        imagePullPolicy: {{ .Values.image.void.pullPolicy }}
+        command: ["true"]
+      restartPolicy: Never
