@@ -10,6 +10,7 @@ thanos:
     hosts:
       - thanos-admin
     annotations:
+      traefik.ingress.kubernetes.io/router.tls.options: default@kubernetescrd
       ingress.kubernetes.io/protocol: h2c
-      ingress.kubernetes.io/ssl-redirect: "true"
+      # ingress.kubernetes.io/ssl-redirect: "true"
   queryDiscovery: true
