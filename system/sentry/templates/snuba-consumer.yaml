@@ -20,7 +20,7 @@ spec:
         imagePullPolicy: {{ .Values.image.snuba.pullPolicy }}
         ports:
         - containerPort: 1218
-        args: ["consumer", "--auto-offset-reset=latest", "--max-batch-time-ms","750"]
+        args: ["consumer", "--storage", "errors", "--auto-offset-reset", "latest", "--max-batch-time-ms", "750"]
         env:
         - name: SNUBA_SETTINGS
           value: docker

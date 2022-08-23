@@ -18,7 +18,7 @@ spec:
       - name: snuba-replacer
         image: "{{required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/{{ required ".Values.image.snuba.repository is missing" .Values.image.snuba.repository }}:{{ required ".Values.image.snuba.tag is missing" .Values.image.snuba.tag }}"
         imagePullPolicy: {{ .Values.image.snuba.pullPolicy }}
-        args: ["replacer", "--auto-offset-reset=latest", "--max-batch-size","3"]
+        args: ["replacer", "--storage", "errors", "--auto-offset-reset", "latest", "--max-batch-size","3"]
         ports:
         - containerPort: 1218
         env:

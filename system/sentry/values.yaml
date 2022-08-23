@@ -30,11 +30,11 @@ organizationSlug: monsoon
 image:
   sentry:
     repository: sentry
-    tag: 10.0.0
+    tag: 22.7.0
     pullPolicy: IfNotPresent
   snuba:
     repository: getsentry/snuba
-    tag: 10.0.0
+    tag: 22.7.0
     pullPolicy: IfNotPresent
   # relay:
   #   repository: getsentry/relay
@@ -46,15 +46,15 @@ image:
     pullPolicy: IfNotPresent
   clickhouse:
     repository: yandex/clickhouse-server
-    tag: 19.4
+    tag: 19.14
     pullPolicy: IfNotPresent
   kafka:
     repository: confluentinc/cp-kafka
-    tag: 5.1.2
+    tag: 5.5.0
     pullPolicy: IfNotPresent
   zookeeper:
     repository: confluentinc/cp-zookeeper
-    tag: 5.1.2
+    tag: 5.5.0
     pullPolicy: IfNotPresent
   void:
     repository: alpine
