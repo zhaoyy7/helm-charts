@@ -26,10 +26,37 @@ workerReplicaCount: 1
 # adminToken:
 organizationName: Monsoon
 organizationSlug: monsoon
+
 image:
-  repository: sentry
-  tag: 9.1.2-r4
-  pullPolicy: IfNotPresent
+  sentry:
+    repository: getsentry/sentry
+    tag: 22.7.0
+    pullPolicy: IfNotPresent
+  snuba:
+    repository: getsentry/snuba
+    tag: 22.7.0
+    pullPolicy: IfNotPresent
+  relay:
+    repository: getsentry/relay
+    tag: 22.7.0
+    pullPolicy: IfNotPresent
+  symbolicator:
+    repository: getsentry/symbolicator
+    tag: 0.5.1
+    pullPolicy: IfNotPresent
+  clickhouse:
+    repository: yandex/clickhouse-server
+    tag: 19.14
+    pullPolicy: IfNotPresent
+  kafka:
+    repository: confluentinc/cp-kafka
+    tag: 5.1.2
+    pullPolicy: IfNotPresent
+  zookeeper:
+    repository: confluentinc/cp-zookeeper
+    tag: 5.1.2
+    pullPolicy: IfNotPresent
+
 service:
   name: sentry
   type: ClusterIP
