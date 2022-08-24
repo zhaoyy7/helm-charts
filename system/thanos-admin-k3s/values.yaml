@@ -1,16 +1,16 @@
 thanos:
   name: admin
   deployWholeThanos: false
-  ingress:
-    enabled: true
-    hosts:
-      - thanos-admin
-  grpcIngress:
-    enabled: true
-    hosts:
-      - thanos-admin
-    annotations:
-      kubernetes.io/ingress.class: traefik
-      ingress.kubernetes.io/backend-protocol: GRPC
-      ingress.kubernetes.io/ssl-redirect: "true"
-  queryDiscovery: true
+  # ingress:
+  #   enabled: true
+  #   hosts:
+  #     - thanos-admin
+  # grpcIngress:
+  #   enabled: true
+  #   hosts:
+  #     - thanos-admin
+  #   annotations:
+  #     kubernetes.io/ingress.class: nginx
+  #     ingress.kubernetes.io/backend-protocol: GRPC
+  #     ingress.kubernetes.io/ssl-redirect: "true"
+  # queryDiscovery: true
