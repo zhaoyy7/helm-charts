@@ -10,7 +10,7 @@ thanos:
     hosts:
       - thanos-admin
     annotations:
-      kubernetes.io/ingress.class: nginx
+      kubernetes.io/ingress.class: traefik
       ingress.kubernetes.io/backend-protocol: GRPC
       ingress.kubernetes.io/ssl-redirect: "true"
   queryDiscovery: true
