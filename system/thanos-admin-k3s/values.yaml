@@ -10,5 +10,10 @@ thanos:
     hosts:
       - thanos-admin
     annotations:
+      ingress.kubernetes.io/auth-tls-secret: "kube-system/ingress-cacrt"
+      ingress.kubernetes.io/auth-tls-verify-depth: "3"
+      ingress.kubernetes.io/auth-tls-verify-client: "true"
+      ingress.kubernetes.io/backend-protocol: GRPC
+      ingress.kubernetes.io/ssl-redirect: "true"
       kubernetes.io/ingress.class: nginx
   queryDiscovery: true
