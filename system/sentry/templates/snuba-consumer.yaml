@@ -30,9 +30,9 @@ spec:
           value: "9000"
         - name: DEFAULT_BROKERS
           value: sentry-kafka:9092
-        - name: SENTRY_REDIS_HOST
+        - name: REDIS_HOST
           value: {{ template "redis.fullname" . }}
-        - name: SENTRY_REDIS_PORT
+        - name: REDIS_PORT
           value: "6379"
 ---
 apiVersion: v1
