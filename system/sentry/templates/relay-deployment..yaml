@@ -47,6 +47,10 @@ spec:
             mountPath: /work/.relay/config.yml
             subPath: config.yml
             readOnly: true
+          {{- if .Values.geodata.volumeName }}
+          - name: {{ .Values.geodata.volumeName }}
+            mountPath: {{ .Values.geodata.mountPath }}
+          {{- end }}
       volumes:
       - name: config
         configMap:
@@ -54,7 +58,8 @@ spec:
           defaultMode: 0644
       - name: credentials
         emptyDir: {}
-
+      - name: geoip
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

@@ -13,7 +13,9 @@ data:
       port: 3000
     processing:
       enabled: true
-      geoip_path: ""
+      {{- if .Values.geodata.path }}
+      geoip_path: {{ .Values.geodata.path | quote }}
+      {{- end }}
       kafka_config:
         - name: "bootstrap.servers"
           value: {{ (include "sentry.kafka.bootstrap_servers_string" .) | quote }}

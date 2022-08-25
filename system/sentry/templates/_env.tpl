@@ -71,4 +71,8 @@
   value: "9000"
 - name: DEFAULT_BROKERS
   value: sentry-kafka:9092
+{{- if .Values.geodata.path }}
+- name: GEOIP_PATH_MMDB
+  value: {{ .Values.geodata.path | quote }}
+{{- end }}
 {{ end }}
