@@ -36,3 +36,29 @@ spec:
           timeoutSeconds: 5
         env:
 {{ include "env-vars" . | indent  10 }}
+{{- if .Values.nginx.enabled }}
+      - name: nginx
+        image: {{ .Values.global.dockerHubMirror | required ".Values.global.dockerHubMirror is missing" }}/library/{{ .Values.nginx.image }}:{{ .Values.nginx.image_version }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+          - name: nginx-etc
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+            readOnly: true
+        ports:
+          - name: http
+            containerPort: {{ .Values.nginx.port.public }}
+            protocol: TCP
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "150m"
+          limits:
+            memory: "50Mi"
+            cpu: "150m"
+      volumes:
+      - name: nginx-etc
+        configMap:
+          name: nginx-etc
+          defaultMode: 0644
+{{- end }}

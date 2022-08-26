@@ -13,6 +13,8 @@
   valueFrom: { secretKeyRef: { name: {{ template "fullname" . }}, key: sentry-secret-key } }
 - name: SENTRY_DB_PASSWORD
   valueFrom: { secretKeyRef: { name: {{ template "postgresql.fullname" . }}, key: postgres-password } }
+- name: SENTRY_URL_PREFIX
+  value: {{ .Values.sentryURL | squote }}
 {{- if .Values.emailHost }}
 - name: SENTRY_EMAIL_HOST
   value: {{ .Values.emailHost | squote }}
