@@ -8,11 +8,14 @@ data:
   config.yml: |-
     relay:
       mode: managed
-      upstream: "https://{{ .Values.ingress.host }}/"
+      upstream: "http://sentry-web:{{ .Values.service.externalPort }}/"
       host: 0.0.0.0
       port: 3000
     processing:
       enabled: true
+      {{- if .Values.geodata.path }}
+      geoip_path: {{ .Values.geodata.path | quote }}
+      {{- end }}
       kafka_config:
         - name: "bootstrap.servers"
           value: {{ (include "sentry.kafka.bootstrap_servers_string" .) | quote }}

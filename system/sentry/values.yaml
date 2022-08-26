@@ -30,7 +30,7 @@ organizationSlug: monsoon
 image:
   sentry:
     repository: sentry
-    tag: nightly-r2
+    tag: nightly-r1
     pullPolicy: IfNotPresent
   snuba:
     repository: getsentry/snuba
@@ -79,18 +79,6 @@ ingress:
 #  host:
 #  tls_crt:
 #  tls_key:
-
-nginx:
-  enabled: true
-  image: nginx
-  image_version: 1.15-alpine
-  port:
-    public: '3001'
-  endpoint:
-    port:
-      public: '3001'
-    host:
-      public: '@/cc/secrets'
 
 operator:
   #sentryEndpoint: https://sentry.$region.cloud.sap/api/0/
