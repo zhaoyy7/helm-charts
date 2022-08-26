@@ -33,6 +33,8 @@ spec:
           value: {{ template "redis.fullname" . }}
         - name: REDIS_PORT
           value: "6379"
+        - name: REDIS_PASSWORD
+          valueFrom: { secretKeyRef: { name: {{ template "redis.fullname" . }}, key: redis-password } }
 ---
 apiVersion: v1
 kind: Service

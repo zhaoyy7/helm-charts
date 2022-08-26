@@ -75,4 +75,6 @@
 - name: GEOIP_PATH_MMDB
   value: {{ .Values.geodata.path | quote }}
 {{- end }}
+- name: SENTRY_URL_PREFIX
+  value: {{ .Values.sentryURL | squote }}
 {{ end }}

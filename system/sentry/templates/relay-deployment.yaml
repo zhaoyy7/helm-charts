@@ -24,6 +24,12 @@ spec:
         env:
           - name: RELAY_PORT
             value: "3000"
+          - name: REDIS_HOST
+            value: {{ template "redis.fullname" . }}
+          - name: REDIS_PORT
+            value: "6379"
+          - name: REDIS_PASSWORD
+            valueFrom: { secretKeyRef: { name: {{ template "redis.fullname" . }}, key: redis-password } }
         volumeMounts:
           - name: credentials
             mountPath: /work/.relay
@@ -38,6 +44,12 @@ spec:
         env:
           - name: RELAY_PORT
             value: "3000"
+          - name: REDIS_HOST
+            value: {{ template "redis.fullname" . }}
+          - name: REDIS_PORT
+            value: "6379"
+          - name: REDIS_PASSWORD
+            valueFrom: { secretKeyRef: { name: {{ template "redis.fullname" . }}, key: redis-password } }
         ports:
         - containerPort: 3000
         volumeMounts:

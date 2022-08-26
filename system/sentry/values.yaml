@@ -30,7 +30,7 @@ organizationSlug: monsoon
 image:
   sentry:
     repository: sentry
-    tag: nightly-r1
+    tag: nightly-r2
     pullPolicy: IfNotPresent
   snuba:
     repository: getsentry/snuba
