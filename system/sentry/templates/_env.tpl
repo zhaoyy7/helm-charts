@@ -77,4 +77,12 @@
 {{- end }}
 - name: SENTRY_URL_PREFIX
   value: {{ .Values.sentryURL | squote }}
+- name: RELAY_PORT
+  value: "3000"
+- name: REDIS_HOST
+  value: {{ template "redis.fullname" . }}
+- name: REDIS_PORT
+  value: "6379"
+- name: REDIS_PASSWORD
+  valueFrom: { secretKeyRef: { name: {{ template "redis.fullname" . }}, key: redis-password } }
 {{ end }}
