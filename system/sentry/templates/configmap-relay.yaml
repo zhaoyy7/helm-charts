@@ -8,7 +8,7 @@ data:
   config.yml: |-
     relay:
       mode: managed
-      upstream: "https://{{ .Values.ingress.host}}:{{ .Values.service.externalPort }}/"
+      upstream: "https://{{ .Values.ingress.host}}/"
       host: 0.0.0.0
       port: 3000
     processing:
@@ -18,4 +18,4 @@ data:
           value: {{ (include "sentry.kafka.bootstrap_servers_string" .) | quote }}
         - name: "message.max.bytes"
           value: 50000000  # 50MB or bust
-      redis: "redis://:{{ .Values.redis.redisPassword }}@{{ template "redis.fullname" . }}:6379"
+      redis: "redis://{{ template "redis.fullname" . }}:6379"
