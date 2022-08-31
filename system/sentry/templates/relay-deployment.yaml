@@ -36,6 +36,10 @@ spec:
           - name: config
             mountPath: /work/.relay/config.yml
             subPath: config.yml
+            readOnly: true
+          - name: config
+            mountPath: /work/.relay/projects/9.json
+            subPath: 9.json
             readOnly: true            
       containers:
       - name: relay
@@ -58,6 +62,10 @@ spec:
           - name: config
             mountPath: /work/.relay/config.yml
             subPath: config.yml
+            readOnly: true
+          - name: config
+            mountPath: /work/.relay/projects/9.json
+            subPath: 9.json
             readOnly: true
           {{- if .Values.geodata.volumeName }}
           - name: {{ .Values.geodata.volumeName }}
