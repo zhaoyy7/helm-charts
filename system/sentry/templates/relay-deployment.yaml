@@ -38,9 +38,13 @@ spec:
             subPath: config.yml
             readOnly: true
           - name: config
-            mountPath: /work/.relay/projects/9.json
-            subPath: 9.json
-            readOnly: true            
+            mountPath: /work/.relay/projects/12.json
+            subPath: 12.json
+            readOnly: true
+          - name: config
+            mountPath: /work/.relay/projects/10.json
+            subPath: 10.json
+            readOnly: true          
       containers:
       - name: relay
         image: "{{required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/{{ required ".Values.image.relay.repository is missing" .Values.image.relay.repository }}:{{ required ".Values.image.relay.tag is missing" .Values.image.relay.tag }}"
@@ -64,8 +68,12 @@ spec:
             subPath: config.yml
             readOnly: true
           - name: config
-            mountPath: /work/.relay/projects/9.json
-            subPath: 9.json
+            mountPath: /work/.relay/projects/12.json
+            subPath: 12.json
+            readOnly: true
+          - name: config
+            mountPath: /work/.relay/projects/10.json
+            subPath: 10.json
             readOnly: true
           {{- if .Values.geodata.volumeName }}
           - name: {{ .Values.geodata.volumeName }}

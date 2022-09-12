@@ -19,12 +19,25 @@ data:
         - name: "message.max.bytes"
           value: 50000000  # 50MB or bust
       redis: "redis://:{{ .Values.redis.redisPassword}}@{{ template "redis.fullname" . }}:6379"
-  9.json: |
+  12.json: |
     {
       "slug": "barbican",
       "publicKeys": [
         {
-          "publicKey": "6b30e38881504f7484e9ad69e730239a",
+          "publicKey": "ef7725705363484195a6c51c29d12d3b",
+          "isEnabled": true
+        }
+      ],
+      "config": {
+        "allowedDomains": ["*"]
+      }
+    }
+  10.json: |
+    {
+      "slug": "blackbox",
+      "publicKeys": [
+        {
+          "publicKey": "e8d0e18f32fc4ba6bf577efbfce57949",
           "isEnabled": true
         }
       ],

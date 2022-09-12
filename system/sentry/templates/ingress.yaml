@@ -43,4 +43,11 @@ spec:
             name: relay
             port:
               number: 3000
+      - path: /api/store/2/*
+        pathType: Prefix
+        backend:
+          service:
+            name: relay
+            port:
+              number: 3000
 {{- end }}
