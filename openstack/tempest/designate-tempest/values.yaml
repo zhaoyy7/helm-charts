@@ -6,4 +6,4 @@ run_pattern: designate_tempest_plugin.tests.
 
 # Optional
 # Concurrency default is 1 
-concurrency: 8
+concurrency: 4
