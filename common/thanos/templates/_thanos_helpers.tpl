@@ -64,8 +64,7 @@ thanos-{{- $host -}}.{{- required ".Values.global.region missing" $root.Values.g
 {{- end -}}
 {{- end -}}
 
-
-{{- define "thanos.objectStorageConfig.name" -}}
+{{- define "thanos.objectStorageConfigName" -}}
 {{- $name := index . 0 -}}
 {{- $root := index . 1 -}}
 prometheus-{{- include "thanos.name" . -}}-thanos-storage-config

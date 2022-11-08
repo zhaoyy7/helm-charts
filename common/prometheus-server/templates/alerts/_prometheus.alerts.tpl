@@ -176,7 +176,7 @@ groups:
     expr: max by(alertname) (ALERTS{support_group=""})
     for: 5m
     labels:
-      tier: {{ include "alerts.tier" . }}
+      tier: {{ include "alerts.tier" $root }}
       service: prometheus
       support_group: observability
       severity: info

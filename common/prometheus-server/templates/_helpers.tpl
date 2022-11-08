@@ -48,7 +48,7 @@ prometheus-{{- $host -}}.{{- required ".Values.global.region missing" $root.Valu
 {{- $host := index . 0 -}}
 {{- $root := index . 1 -}}
 {{- if not $root.Values.internalIngress.hosts -}}
-{{- $host -}}-internal.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.domain missing" $root.Values.global.domain -}}
+prometheus-{{- $host -}}-internal.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.domain missing" $root.Values.global.domain -}}
 {{- else -}}
 {{- $host -}}.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.domain missing" $root.Values.global.domain -}}
 {{- end -}}
