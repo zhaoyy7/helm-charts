@@ -54,6 +54,16 @@ thanos-{{- $host -}}.{{- required ".Values.global.region missing" $root.Values.g
 {{- end -}}
 {{- end -}}
 
+{{- define "grpcFqdnHelper" -}}
+{{- $host := index . 0 -}}
+{{- $root := index . 1 -}}
+{{- if not $root.Values.grpcIngress.hosts -}}
+{{- $host -}}-grpc.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.domain missing" $root.Values.global.domain -}}
+{{- else -}}
+{{- $host -}}.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.domain missing" $root.Values.global.domain -}}
+{{- end -}}
+{{- end -}}
+
 
 {{- define "thanos.objectStorageConfig.name" -}}
 {{- $name := index . 0 -}}

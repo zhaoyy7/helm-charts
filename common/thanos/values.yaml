@@ -21,9 +21,11 @@ global:
   # targets:
 
 
-# Mandatory names for this Thanos.  If not set .Values.global.targets is used.
-# It is a list to deploy multiple Thanos with the same configuration. e.g. for different targets, Openstack services, ...
-names:
+# Mandatory name for a single Thanos. To setup multiple, define a list of .Values.names or .Values.global.targets to deploy multipe Thanos.
+name: 
+
+# A list to deploy multiple Prometheis with the same configuration but different names.
+# names:
 
 # false means only Thanos Query is deployed. Used for regional and global Thaneis.
 # If set to true everything in templates (StoreEndpoint, StoreGateway, Query) is deployed.
@@ -133,16 +135,15 @@ query:
 ingress:
   enabled: false
 
-  # If true, the FQDN (external URL) will be generated automatically using the pattern prometheus-<name[i]>.<region>.<domain> 
-  externalURL: true
-  
-  # List of additional host names to be used as SANs.
+  # List of hostnames for this Thanos server. If empty, the FQDN will be generated using the pattern  prometheus-<name>.<region>.<domain> otherwise <host>.<region>.<domain>.
+  # The first host is used to generate the external URL for the Thanos. Remaining hosts will be used as SANs.
   # If the ingress is enabled, it's also used for the ingress host.
-  additionalHosts: []
+  hosts: []
 
-  # List of additional fully qualified host names to be used as SANs. Mutually exclusive with additionalHosts.
+  # List of fully qualified host names to be used for this Thanos server. Mutually exclusive with hosts.
+  # The first host is used to generate the external URL for the Thanos. Remaining hosts will be used as SANs.
   # If the ingress is enabled, it's also used for the ingress host.
-  additionalHostsFQDN: []
+  hostsFQDN: []
 
   # Client certificate authentication on ingress level.
   authentication:
@@ -172,16 +173,15 @@ ingress:
 grpcIngress:
   enabled: false
 
-  # If true, the FQDN (external URL) will be generated automatically using the pattern prometheus-<name[i]>.<region>.<domain> 
-  externalURL: true
-  
-  # List of additional host names to be used as SANs.
+  # List of hostnames for this Thanos server. If empty, the FQDN will be generated using the pattern  thanos-<name>-grpc.<region>.<domain> otherwise <host>.<region>.<domain>.
+  # The first host is used to generate the external URL for the Thanos. Remaining hosts will be used as SANs.
   # If the ingress is enabled, it's also used for the ingress host.
-  additionalHosts: []
+  hosts: []
 
-  # List of additional fully qualified host names to be used as SANs. Mutually exclusive with additionalHosts.
+  # List of fully qualified host names to be used for this Thanos server. Mutually exclusive with hosts.
+  # The first host is used to generate the external URL for the Thanos. Remaining hosts will be used as SANs.
   # If the ingress is enabled, it's also used for the ingress host.
-  additionalHostsFQDN: []
+  hostsFQDN: []
 
   # Client certificate authentication on ingress level.
   authentication:

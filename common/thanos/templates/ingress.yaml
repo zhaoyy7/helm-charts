@@ -35,8 +35,8 @@ spec:
                 name: http
           pathType: ImplementationSpecific
     {{- end }}
-    {{- range $host := $.Values.ingress.additionalHostsFQDN }}
-    - host: {{ include "fqdnHelper" (list $host $root) }}
+    {{- range $host := $.Values.ingress.hostsFQDN }}
+    - host: {{ $host }}
       http:
         paths:
         - path: /

@@ -11,7 +11,7 @@ spec:
   config:
     mountFrom:
       secretKeyRef:
-        name: prometheus-{{ include "thanos.name" (list $name $root) }}-thanos-storage-config
+        name: {{ include "thanos.objectStorageConfigName" (list $name $root) }}
         key: thanos.yaml
 {{- end }}
 {{- end }}
