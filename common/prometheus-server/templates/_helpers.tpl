@@ -91,6 +91,16 @@ prometheus-{{- $host -}}.{{- required ".Values.global.region missing" $root.Valu
 {{- end -}}
 {{- end -}}
 
+{{- define "thanos.objectStorageConfig.name" -}}
+{{- $name := index . 0 -}}
+{{- $root := index . 1 -}}
+{{- if and $root.Values.thanos.spec.objectStorageConfig -}}
+{{- required ".Values.thanos.spec.objectStorageConfig.name missing" $root.Values.thanos.spec.objectStorageConfig.name -}}
+{{- else -}}
+{{- include "prometheus.fullName" . -}}-{{- required ".Values.thanos.objectStorageConfig.name missing" $root.Values.thanos.objectStorageConfig.name -}}
+{{- end -}}
+{{- end -}}
+
 {{- define "thanos.objectStorageConfig.key" -}}
 {{- if .Values.thanos.spec.objectStorageConfig -}}
 {{- required ".Values.thanos.spec.objectStorageConfig.key missing" .Values.thanos.spec.objectStorageConfig.key -}}
@@ -168,6 +178,8 @@ prometheus-{{- $host -}}.{{- required ".Values.global.region missing" $root.Valu
 
 {{/* Generated Swift User Name. */}}
 {{- define "swift.userName" -}}
-prometheus-{{- (include "prometheus.name" .) -}}-thanos
+{{- $name := index . 0 -}}
+{{- $root := index . 1 -}}
+{{- (include "prometheus.fullName" .) -}}-thanos
 {{- end -}}
 

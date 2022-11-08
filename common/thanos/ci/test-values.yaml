@@ -6,8 +6,7 @@ global:
   tier: alertTierKubernetes
 
 thanos:
-  names:
-    - bestThanos
+  name: bestThanos
   enabled: true
   swiftStorageConfig:
     authURL: https://keystone.evil.corp/v3

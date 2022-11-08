@@ -9,6 +9,7 @@ groups:
       labels:
         context: thanos
         service: prometheus
+        support_group: observability
         severity: info
         tier: {{ include "alerts.tier" $root }}
         meta: 'Thanos Sidecar bucket operations are failing for Prometheus {{`{{ $labels.prometheus }}`}}'
@@ -23,6 +24,7 @@ groups:
       labels:
         context: thanos
         service: prometheus
+        support_group: observability
         severity: info
         tier: {{ include "alerts.tier" $root }}
         meta: 'Thanos Sidecar is returning Internal/Unavailable errors for Prometheus {{`{{ $labels.prometheus }}`}}'

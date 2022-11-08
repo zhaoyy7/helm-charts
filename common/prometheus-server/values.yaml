@@ -24,17 +24,13 @@ global:
 image:
   repository: keppel.eu-de-1.cloud.sap/ccloud-dockerhub-mirror/prom/prometheus
 
-# Mandatory name for this Prometheus. If not set define a list of .Values.names or .Values.global.targets to deploy multipe prometheis.
+# Mandatory name for a single Prometheus. To setup multiple, define a list of .Values.names or .Values.global.targets to deploy multipe prometheis.
 # The name is used to find relevant aggregation and alerting rules.
 # Examples: kubernetes, openstack, infrastructure, maia, vmware etc.
 name: 
 
 # A list to deploy multiple Prometheis with the same configuration but different names.
 # names:
-
-# Enabled true leverages global.targets to deploy multiple prometheis with the same configuration but different targets
-# deployMultiple:
-#   enabled: false
 
 # Defines how long data is stored. Format: `[0-9]+(ms|s|m|h|d|w|y)`
 retentionTime: 7d
@@ -278,7 +274,8 @@ serviceDiscoveries:
   # Targets found via SD are only kept if the `prometheus.io/targets` annotation matches the name of this Prometheus.
   # However this can be overridden using the following parameter.
   # The result is a regex like `.*$prometheusName.*|.*$additionalTargets[i].*`
-  additionalTargets: []
+  # additionalTargets:
+  #   - ...
 
   # Scrape interval for all jobs.
   scrapeInterval: 30s

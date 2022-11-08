@@ -52,9 +52,9 @@ spec:
   # If Thanos is enabled the prefix `thanos_` is added to external labels to avoid overriding existing ones (region, cluster)
   # which might have been added by previous Prometheis in the federation hierarchy.
   externalLabels:
-    {{ include "thanosPrefix" $root  -}}region: {{ required "$.Values.global.region missing" $.Values.global.region }}
-    {{ include "thanosPrefix" $root  -}}cluster: {{ if $.Values.global.cluster }}{{ $.Values.global.cluster }}{{ else }}{{ $.Values.global.region }}{{ end }}
-    {{ include "thanosPrefix" $root  -}}cluster_type: {{ required "$.Values.global.clusterType missing" $.Values.global.clusterType }}
+    region: {{ required ".Values.global.region missing" .Values.global.region }}
+    cluster: {{ if .Values.global.cluster }}{{ .Values.global.cluster }}{{ else }}{{ .Values.global.region }}{{ end }}
+    cluster_type: {{ required ".Values.global.clusterType missing" .Values.global.clusterType }}
     {{- if $.Values.externalLabels }}
 {{ toYaml $.Values.externalLabels | indent 4 }}
     {{- end }}
@@ -137,7 +137,7 @@ spec:
   thanos:
     {{- if not $.Values.thanos.spec.objectStorageConfig }}
     objectStorageConfig:
-      name: {{ include "prometheus.fullName" (list $name $root) }}-thanos-storage-config
+      name: {{ include "thanos.objectStorageConfig.name" (list $name $root) }}
       key: {{ include "thanos.objectStorageConfig.key" $root }}
       optional: true
     {{ end }}

@@ -18,7 +18,7 @@ spec:
   domains:
     - name: {{ required "$.Values.thanos.swiftStorageConfig.userDomainName missing" $.Values.thanos.swiftStorageConfig.userDomainName }}
       users:
-        - name: {{ include "prometheus.fullName" (list $name $root) }}-thanos
+        - name: {{ include "swift.userName" (list $name $root) }}
           description: Thanos Service User
           password: {{ required "$.Values.thanos.swiftStorageConfig.password missing" $.Values.thanos.swiftStorageConfig.password | quote }}
           role_assignments:
@@ -30,10 +30,10 @@ spec:
         - name: {{ include "thanos.projectName" $root }}
           role_assignments:
             # Read/write permission to $domain/$project containers.
-            - user: {{ include "prometheus.fullName" (list $name $root) }}-thanos@{{ required "$.Values.thanos.swiftStorageConfig.userDomainName missing" $.Values.thanos.swiftStorageConfig.userDomainName }}
+            - user: {{ include "swift.userName" (list $name $root) }}@{{ required "$.Values.thanos.swiftStorageConfig.userDomainName missing" $.Values.thanos.swiftStorageConfig.userDomainName }}
               role: objectstore_admin
           swift:
             containers:
-              - name: {{ include "prometheus.fullName" (list $name $root) }}-thanos
+              - name: {{ include "swift.userName" (list $name $root) }}
 {{- end }}
 {{- end }}
