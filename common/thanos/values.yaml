@@ -17,8 +17,15 @@ global:
   # Optional tier for Prometheus alerts.
   # tier: k8s
 
-# Mandatory name for this Thanos.
-name:
+  # Optional targets to create Thanos names.
+  # targets:
+
+
+# Mandatory name for a single Thanos. To setup multiple, define a list of .Values.names or .Values.global.targets.
+name: 
+
+# A list to deploy multiple Prometheis with the same configuration but different names.
+# names:
 
 # false means only Thanos Query is deployed. Used for regional and global Thaneis.
 # If set to true everything in templates (StoreEndpoint, StoreGateway, Query) is deployed.
@@ -128,7 +135,7 @@ query:
 ingress:
   enabled: false
 
-  # List of hostnames for this Thanos server. FQDN will be generated using the pattern  <host>.<region>.<domain> .
+  # List of hostnames for this Thanos Query. If empty, the FQDN will be generated using the pattern  thanos-<name>.<region>.<domain> otherwise <host>.<region>.<domain>.
   # The first host is used to generate the external URL for the Thanos. Remaining hosts will be used as SANs.
   # If the ingress is enabled, it's also used for the ingress host.
   hosts: []
@@ -166,8 +173,8 @@ ingress:
 grpcIngress:
   enabled: false
 
-  # List of hostnames for this Thanos Query. FQDN will be generated using the pattern  <host>.<region>.<domain> .
-  # The first host is used to generate the external URL for the Prometheus. Remaining hosts will be used as SANs.
+  # List of hostnames for this Thanos Query. If empty, the FQDN will be generated using the pattern  thanos-<name>-grpc.<region>.<domain> otherwise <host>.<region>.<domain>.
+  # The first host is used to generate the external URL for the Thanos. Remaining hosts will be used as SANs.
   # If the ingress is enabled, it's also used for the ingress host.
   hosts: []
 
@@ -191,6 +198,9 @@ grpcIngress:
 
   # Additional annotations for the gRPC ingress.
   annotations: {}
+
+# If true, a custom Prometheus naming will take place.
+vmware: false
 
 traefik:
   # defaults to false. Should only be enabled if traefik is used over default ingress-nginx. Please set grpcIngress.enabled to false in this case.
