@@ -17,8 +17,13 @@ global:
   # Optional tier for Prometheus alerts.
   # tier: k8s
 
-# Mandatory name for this Thanos.
-name:
+  # Optional targets to create Thanos names.
+  # targets:
+
+
+# Mandatory names for this Thanos.  If not set .Values.global.targets is used.
+# It is a list to deploy multiple Thanos with the same configuration. e.g. for different targets, Openstack services, ...
+names:
 
 # false means only Thanos Query is deployed. Used for regional and global Thaneis.
 # If set to true everything in templates (StoreEndpoint, StoreGateway, Query) is deployed.
@@ -128,15 +133,16 @@ query:
 ingress:
   enabled: false
 
-  # List of hostnames for this Thanos server. FQDN will be generated using the pattern  <host>.<region>.<domain> .
-  # The first host is used to generate the external URL for the Thanos. Remaining hosts will be used as SANs.
+  # If true, the FQDN (external URL) will be generated automatically using the pattern prometheus-<name[i]>.<region>.<domain> 
+  externalURL: true
+  
+  # List of additional host names to be used as SANs.
   # If the ingress is enabled, it's also used for the ingress host.
-  hosts: []
+  additionalHosts: []
 
-  # List of fully qualified host names to be used for this Thanos server. Mutually exclusive with hosts.
-  # The first host is used to generate the external URL for the Thanos. Remaining hosts will be used as SANs.
+  # List of additional fully qualified host names to be used as SANs. Mutually exclusive with additionalHosts.
   # If the ingress is enabled, it's also used for the ingress host.
-  hostsFQDN: []
+  additionalHostsFQDN: []
 
   # Client certificate authentication on ingress level.
   authentication:
@@ -166,15 +172,16 @@ ingress:
 grpcIngress:
   enabled: false
 
-  # List of hostnames for this Thanos Query. FQDN will be generated using the pattern  <host>.<region>.<domain> .
-  # The first host is used to generate the external URL for the Prometheus. Remaining hosts will be used as SANs.
+  # If true, the FQDN (external URL) will be generated automatically using the pattern prometheus-<name[i]>.<region>.<domain> 
+  externalURL: true
+  
+  # List of additional host names to be used as SANs.
   # If the ingress is enabled, it's also used for the ingress host.
-  hosts: []
+  additionalHosts: []
 
-  # List of fully qualified host names to be used for this Thanos server. Mutually exclusive with hosts.
-  # The first host is used to generate the external URL for the Thanos. Remaining hosts will be used as SANs.
+  # List of additional fully qualified host names to be used as SANs. Mutually exclusive with additionalHosts.
   # If the ingress is enabled, it's also used for the ingress host.
-  hostsFQDN: []
+  additionalHostsFQDN: []
 
   # Client certificate authentication on ingress level.
   authentication:
@@ -191,6 +198,9 @@ grpcIngress:
 
   # Additional annotations for the gRPC ingress.
   annotations: {}
+
+# If true, a custom Prometheus naming will take place.
+vmware: false
 
 traefik:
   # defaults to false. Should only be enabled if traefik is used over default ingress-nginx. Please set grpcIngress.enabled to false in this case.

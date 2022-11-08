@@ -8,7 +8,8 @@ global:
 externalLabels:
   foo: bar
 
-name: regionOnePrometheus
+names:
+  - regionOnePrometheus
 retentionTime: 7d
 
 ingress:
@@ -23,8 +24,7 @@ ingress:
       authTLSSecret: kube-system/ingress-cacrt
       authTLSVerifyDepth: 3
       authTLSVerifyClient: on
-  hosts:
-    - regionOnePrometheus
+  additionalHosts:
     - san1
     - san2
 
@@ -40,8 +40,7 @@ internalIngress:
       authTLSSecret: kube-system/ingress-cacrt
       authTLSVerifyDepth: 3
       authTLSVerifyClient: on
-  hosts:
-    - regionOnePrometheusInternal
+  additionalHosts:
     - san1-internal
     - san2-internal
 

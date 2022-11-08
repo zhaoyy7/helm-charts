@@ -1,36 +1,64 @@
 {{- if .Values.grpcIngress.enabled }}
 {{- $root := . }}
+{{- range $name := coalesce .Values.names .Values.global.targets (list .Values.name) }}
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress 
 metadata:
-  name: {{ include "thanos.fullName" . }}-grpc
+  name: {{ include "thanos.fullName" (list $name $root) }}-grpc
   annotations:
     disco: "true"
     kubernetes.io/tls-acme: "true"
-    {{- if .Values.grpcIngress.annotations }}
-{{ toYaml .Values.grpcIngress.annotations | indent 4 }}
+    {{- if $.Values.grpcIngress.annotations }}
+{{ toYaml $.Values.grpcIngress.annotations | indent 4 }}
     {{ end }}
 spec:
   rules:
-    {{- range $host := $root.Values.grpcIngress.hosts }}
-    - host: {{ $host }}-grpc.{{ $root.Values.global.region }}.{{ $root.Values.global.tld }}
+    {{- if $.Values.ingress.externalURL }}
+    - host: {{- include "thanos.fullName" (list $name $root) -}}-grpc.{{- required "$.Values.global.region missing" $root.Values.global.region -}}.{{- required "$.Values.global.domain missing" $root.Values.global.domain -}}
       http:
         paths:
         - path: /
           backend:
             service:
-              name:  {{ include "thanos.fullName" $root }}-query
+              name:  {{ include "thanos.fullName" (list $name $root) }}-query
+              port:
+                name: grpc
+          pathType: ImplementationSpecific
+    {{- end }}
+    {{- range $host := $.Values.grpcIngress.additionalHosts }}
+    - host: {{- $host -}}-grpc.{{- required "$.Values.global.region missing" $root.Values.global.region -}}.{{- required "$.Values.global.domain missing" $root.Values.global.domain -}}
+      http:
+        paths:
+        - path: /
+          backend:
+            service:
+              name:  {{ include "thanos.fullName" (list $name $root) }}-query
+              port:
+                name: grpc
+          pathType: ImplementationSpecific
+    {{- end }}
+    {{- range $host := $.Values.grpcIngress.additionalHostsFQDN }}
+    - host: {{- $host -}}-grpc.{{- required "$.Values.global.region missing" $root.Values.global.region -}}.{{- required "$.Values.global.domain missing" $root.Values.global.domain -}}
+      http:
+        paths:
+        - path: /
+          backend:
+            service:
+              name:  {{ include "thanos.fullName" (list $name $root) }}-query
               port:
                 name: grpc
           pathType: ImplementationSpecific
     {{- end }}
   tls:
-    - secretName: tls-{{ include "thanos.grpcURL" $root | replace "." "-" }}
+    - secretName: tls-{{ include "thanos.externalGrpcURL" (list (include "thanos.fullName" (list $name $root)) $root) | replace "." "-" }}
       hosts:
-        {{- range $host := $root.Values.grpcIngress.hosts }}
-        - {{ $host }}-grpc.{{ $root.Values.global.region }}.{{ $root.Values.global.tld }}
+        - {{ include "fqdnHelper" (list (include "thanos.fullName" (list $name $root)) $root) }}
+        {{- range $host := $.Values.ingress.additionalHosts }}
+        - {{ include "fqdnHelper" (list $host $root) }}
         {{- end }}
-        {{- range $host := $root.Values.grpcIngress.hostsFQDN }}
+        {{- range $host := $.Values.ingress.additionalHostsFQDN }}
         - {{ $host }}
         {{- end }}
+{{- end }}
 {{- end }}
