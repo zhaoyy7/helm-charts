@@ -1,3 +1,4 @@
+{/* Name of the Prometheus. */}}
 {{- define "prometheus.name" -}}
 {{- $name := index . 0 -}}
 {{- $root := index . 1 -}}
@@ -13,6 +14,7 @@ vmware-{{ $vropshostname._0 | trimPrefix "vrops-" }}
 {{- end -}}
 {{- end -}}
 
+{{/* Fullname of the Prometheus. */}}
 {{- define "prometheus.fullName" -}}
 {{- $name := index . 0 -}}
 {{- $root := index . 1 -}}
