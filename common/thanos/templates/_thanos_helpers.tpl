@@ -34,23 +34,29 @@ thanos-{{- $name -}}
 {{- define "thanos.externalURL" -}}
 {{- $name := index . 0 -}}
 {{- $root := index . 1 -}}
-{{- $name -}}.{{- required "$root.Values.global.region missing" $root.Values.global.region -}}.{{- required "$root.Values.global.domain missing" $root.Values.global.domain -}}
+{{- if and $root.Values.ingress.hosts $root.Values.ingress.hostsFQDN -}}
+{{- fail ".Values.ingress.hosts and .Values.ingress.hostsFQDN are mutually exclusive." -}}
+{{- end -}}
+thanos-{{- $name -}}.{{- required "$root.Values.global.region missing" $root.Values.global.region -}}.{{- required "$root.Values.global.tld missing" $root.Values.global.tld -}}
 {{- end -}}
 
 {{/* External gRPC URL of this Thanos. */}}
 {{- define "thanos.externalGrpcURL" -}}
 {{- $name := index . 0 -}}
 {{- $root := index . 1 -}}
-{{- $name -}}-grpc.{{- required "$root.Values.global.region missing" $root.Values.global.region -}}.{{- required "$root.Values.global.domain missing" $root.Values.global.domain -}}
+{{- if and $root.Values.ingress.hosts $root.Values.ingress.hostsFQDN -}}
+{{- fail ".Values.ingress.hosts and .Values.ingress.hostsFQDN are mutually exclusive." -}}
+{{- end -}}
+thanos-{{- $name -}}-grpc.{{- required "$root.Values.global.region missing" $root.Values.global.region -}}.{{- required "$root.Values.global.tld missing" $root.Values.global.tld -}}
 {{- end -}}
 
 {{- define "fqdnHelper" -}}
 {{- $host := index . 0 -}}
 {{- $root := index . 1 -}}
 {{- if not $root.Values.ingress.hosts -}}
-thanos-{{- $host -}}.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.domain missing" $root.Values.global.domain -}}
+thanos-{{- $host -}}.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.tld missing" $root.Values.global.tld -}}
 {{- else -}}
-{{- $host -}}.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.domain missing" $root.Values.global.domain -}}
+{{- $host -}}.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.tld missing" $root.Values.global.tld -}}
 {{- end -}}
 {{- end -}}
 
@@ -58,9 +64,9 @@ thanos-{{- $host -}}.{{- required ".Values.global.region missing" $root.Values.g
 {{- $host := index . 0 -}}
 {{- $root := index . 1 -}}
 {{- if not $root.Values.grpcIngress.hosts -}}
-{{- $host -}}-grpc.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.domain missing" $root.Values.global.domain -}}
+thanos-{{- $host -}}-grpc.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.tld missing" $root.Values.global.tld -}}
 {{- else -}}
-{{- $host -}}.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.domain missing" $root.Values.global.domain -}}
+{{- $host -}}.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.tld missing" $root.Values.global.tld -}}
 {{- end -}}
 {{- end -}}
 

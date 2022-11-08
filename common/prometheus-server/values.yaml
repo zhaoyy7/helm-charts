@@ -24,7 +24,7 @@ global:
 image:
   repository: keppel.eu-de-1.cloud.sap/ccloud-dockerhub-mirror/prom/prometheus
 
-# Mandatory name for a single Prometheus. To setup multiple, define a list of .Values.names or .Values.global.targets to deploy multipe prometheis.
+# Mandatory name for a single Prometheus. To setup multiple, define a list of .Values.names or .Values.global.targets.
 # The name is used to find relevant aggregation and alerting rules.
 # Examples: kubernetes, openstack, infrastructure, maia, vmware etc.
 name: 
@@ -123,7 +123,7 @@ ingress:
 internalIngress:
   enabled: false
 
-  # List of hostnames for this Prometheus server. If empty, the FQDN will be generated using the pattern  prometheus-<name>.<region>.<domain> otherwise <host>.<region>.<domain>.
+  # List of hostnames for this Prometheus server. If empty, the FQDN will be generated using the pattern  prometheus-<name>-internal.<region>.<domain> otherwise <host>.<region>.<domain>.
   # The first host is used to generate the external URL for the Prometheus. Remaining hosts will be used as SANs.
   # If the ingress is enabled, it's also used for the ingress host.
   hosts: []

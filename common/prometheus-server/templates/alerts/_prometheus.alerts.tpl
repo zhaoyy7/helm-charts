@@ -14,7 +14,7 @@ Note: The pods define the 'alert-service' label but Prometheus replaces the hyph
 */}}
 {{- define "alertServiceLabelOrDefault" -}}
 "{{`{{ if $labels.label_alert_service }}`}}{{`{{ $labels.label_alert_service}}`}}{{`{{ else }}`}}{{ required "default value is missing" . }}{{`{{ end }}`}}"
-{{- end }}
+{{- end -}}
 
 {{- $name := index . 0 -}}
 {{- $root := index . 1 -}}

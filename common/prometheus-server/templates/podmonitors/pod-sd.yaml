@@ -55,7 +55,7 @@ spec:
           regex: '(.+)'
         - sourceLabels:
             - __metrics_path__
-          targetLabel: metrics_path          
+          targetLabel: metrics_path  
         - sourceLabels:
             - __address__
             - __meta_kubernetes_pod_annotation_prometheus_io_port

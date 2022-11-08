@@ -31,6 +31,9 @@ prometheus-{{- (include "prometheus.name" .) -}}
 {{- define "prometheus.externalURL" -}}
 {{- $name := index . 0 -}}
 {{- $root := index . 1 -}}
+{{- if and $root.Values.ingress.hosts $root.Values.ingress.hostsFQDN -}}
+{{- fail ".Values.ingress.hosts and .Values.ingress.hostsFQDN are mutually exclusive." -}}
+{{- end -}}
 prometheus-{{- $name -}}.{{- required "$root.Values.global.region missing" $root.Values.global.region -}}.{{- required "$root.Values.global.domain missing" $root.Values.global.domain -}}
 {{- end -}}
 
@@ -142,13 +145,6 @@ prometheus-{{- $host -}}-internal.{{- required ".Values.global.region missing" $
   {{- .Values.global.tier -}}
 {{- else -}}
   {{- required ".Values.alerts.tier missing" .Values.alerts.tier -}}
-{{- end -}}
-{{- end -}}
-
-{{/* If Thanos is enabled the prefix `thanos_` is added to external labels to avoid overriding existing ones (region, cluster) which were added by previous Prometheis in the federation hierarchy. */}}
-{{- define "thanosPrefix" -}}
-{{- if .Values.thanos.enabled -}}
-{{- "thanos_" -}}
 {{- end -}}
 {{- end -}}
 

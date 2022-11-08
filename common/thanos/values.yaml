@@ -21,7 +21,7 @@ global:
   # targets:
 
 
-# Mandatory name for a single Thanos. To setup multiple, define a list of .Values.names or .Values.global.targets to deploy multipe Thanos.
+# Mandatory name for a single Thanos. To setup multiple, define a list of .Values.names or .Values.global.targets.
 name: 
 
 # A list to deploy multiple Prometheis with the same configuration but different names.
@@ -135,7 +135,7 @@ query:
 ingress:
   enabled: false
 
-  # List of hostnames for this Thanos server. If empty, the FQDN will be generated using the pattern  prometheus-<name>.<region>.<domain> otherwise <host>.<region>.<domain>.
+  # List of hostnames for this Thanos server. If empty, the FQDN will be generated using the pattern  thanos-<name>.<region>.<domain> otherwise <host>.<region>.<domain>.
   # The first host is used to generate the external URL for the Thanos. Remaining hosts will be used as SANs.
   # If the ingress is enabled, it's also used for the ingress host.
   hosts: []

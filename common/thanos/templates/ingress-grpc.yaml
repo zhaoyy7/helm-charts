@@ -26,7 +26,7 @@ spec:
                 name: grpc
           pathType: ImplementationSpecific
     {{- end }}
-    {{- range $host := coalesce $.Values.grpcIngress.hostsFQDN (list $name) }}
+    {{- range $host := $.Values.grpcIngress.hostsFQDN }}
     - host: {{ $host }}
       http:
         paths:
@@ -39,12 +39,12 @@ spec:
           pathType: ImplementationSpecific
     {{- end }}
   tls:
-    - secretName: tls-{{ include "thanos.externalGrpcURL" (list (include "thanos.fullName" (list $name $root)) $root) | replace "." "-" }}
+    - secretName: tls-{{ include "thanos.externalGrpcURL" (list $name $root) | replace "." "-" }}
       hosts:
         {{- range $host := coalesce $.Values.grpcIngress.hosts (list $name) }}
         - {{ include "grpcFqdnHelper" (list $host $root) }}
         {{- end }}
-        {{- range $host := coalesce $.Values.grpcIngress.hostsFQDN (list $name) }}
+        {{- range $host := $.Values.grpcIngress.hostsFQDN }}
         - {{ $host }}
         {{- end }}
 {{- end }}

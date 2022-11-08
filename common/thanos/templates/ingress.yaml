@@ -53,7 +53,7 @@ spec:
         {{- range $host := coalesce $.Values.ingress.hosts (list $name) }}
         - {{ include "fqdnHelper" (list $host $root) }}
         {{- end }}
-        {{- range $host := $.Values.ingress.additionalHostsFQDN }}
+        {{- range $host := $.Values.ingress.hostsFQDN }}
         - {{ $host }}
         {{- end }}
 {{- end }}
