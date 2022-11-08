@@ -27,6 +27,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: critical
       tier: {{ include "alerts.tier" $root }}
       playbook: 'docs/support/playbook/prometheus/failed_config_reload.html'
@@ -41,6 +42,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: warning
       tier: {{ include "alerts.tier" $root }}
       playbook: 'docs/support/playbook/prometheus/rule_evaluation.html'
@@ -55,6 +57,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: info
       tier: {{ include "alerts.tier" $root }}
       playbook: 'docs/support/playbook/prometheus/rule_evaluation.html'
@@ -68,6 +71,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: info
       tier: {{ include "alerts.tier" $root }}
       playbook: 'docs/support/playbook/prometheus/wal.html'
@@ -82,6 +86,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: info
       tier: {{ include "alerts.tier" $root }}
       playbook: 'docs/support/playbook/prometheus/failed_tsdb_reload.html'
@@ -96,6 +101,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: info
       tier: {{ include "alerts.tier" $root }}
       playbook: 'docs/support/playbook/prometheus/failed_scrapes.html'
@@ -110,6 +116,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: info
       tier: {{ include "alerts.tier" $root }}
       playbook: 'docs/support/playbook/prometheus/failed_scrapes.html'
@@ -123,6 +130,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: info
       tier: {{ include "alerts.tier" $root }}
       playbook: 'docs/support/playbook/prometheus/failed_scrapes.html'
@@ -136,6 +144,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: info
       tier: {{ include "alerts.tier" $root }}
       playbook: 'docs/support/playbook/prometheus/failed_scrapes.html'
@@ -145,8 +154,7 @@ groups:
       summary: Prometheus fails to scrape targets.
 
   - alert: PrometheusMultipleTargetScrapes
-    # we exclude the following:
-    # * cadvisor metrics because it has the same instance as the kubelet but a different path
+    # we exclude cadvisor metrics because it has the same instance as the kubelet but a different path
     # e.g. 10.246.204.80:10250/metrics vs. 10.246.204.80:10250/metrics/cadvisor
     # We also exclude the pod service discovery job, we have a dedicated alert for that
     expr: sum by (job) (up * on(instance) group_left() (sum by(instance) (up{job !~ "kubernetes-cadvisors|kubernetes-kubelet|.*-pod-sd"}) > 1))
@@ -154,12 +162,27 @@ groups:
     labels:
       tier: {{ include "alerts.tier" $root }}
       service: prometheus
+      support_group: observability
       severity: warning
       playbook: docs/support/playbook/kubernetes/target_scraped_multiple_times.html
       meta: 'Prometheus is scraping targets of job {{`{{ $labels.job }}`}} more than once.'
     annotations:
       description: Prometheus is scraping individual targets of the job `{{`{{ $labels.job }}`}}` more than once. This is likely caused due to incorrectly placed scrape annotations.  <https://{{ include "prometheus.externalURL" (list $name $root) }}/graph?g0.expr={{ urlquery `up * on(instance) group_left() (sum by(instance) (up{job="PLACEHOLDER"}) > 1)` | replace "PLACEHOLDER" "{{ $labels.job }}"}}|Affected targets>
       summary: Prometheus target scraped multiple times
+
+  - alert: AlertWithMissingSupportGroupLabel
+    expr: max by(alertname) (ALERTS{support_group=""})
+    for: 5m
+    labels:
+      tier: {{ include "alerts.tier" . }}
+      service: prometheus
+      support_group: observability
+      severity: info
+      playbook: docs/support/operation_model/tags.html
+      meta: 'Alert {{`{{ $labels.alertname }}`}} is missing the `support_group` label'
+    annotations:
+      description: Alert `{{`{{ $labels.alertname }}`}}` is missing the required `support_group` label
+      summary: Alert is missing support_group label
 
   {{- if and $root.Values.alertmanagers (gt (len $root.Values.alertmanagers) 0) }}
   - alert: PrometheusNotConnectedToAlertmanagers
@@ -168,6 +191,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: warning
       tier: {{ include "alerts.tier" $root }}
       meta: 'Prometheus {{`{{ $labels.prometheus }}`}} lost connection to all Alertmanagers'
@@ -181,6 +205,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: info
       tier: {{ include "alerts.tier" $root }}
       meta: 'Prometheus {{`{{ $labels.prometheus }}`}} fails to send alerts'
@@ -194,6 +219,7 @@ groups:
     labels:
       context: availability
       service: prometheus
+      support_group: observability
       severity: info
       tier: {{ include "alerts.tier" $root }}
       meta: 'Prometheus {{`{{ $labels.prometheus }}`}} queueing notifications'
