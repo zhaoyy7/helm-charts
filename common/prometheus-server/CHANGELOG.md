@@ -1,28 +1,4 @@
-## 7.0.11
-
-* Exclude `job=prometheus-vmware` from PrometheusMultipleTargetScrapes alert because this target is scraped with multiple jobs to the same target intentionally. Every scrape just replies a single metric.
-
-## 7.0.10
-
-* Bump prometheus to v2.39.1
-
-## 7.0.9
-
-* removing Thanos prefix as it is only used in global Thanos Prometheis -> restoring region, cluster, cluster_type labels
-
-## 7.0.6 - 7.0.8
-
-* AlertWithMissingSupportGroupLabel alert added
-
-## 7.0.5
-
-* fix PrometheusMultipleTargetScrapes in global proms
-
-## 7.0.4
-
-* label fix for prometheus operator bump
-
-## 7.0.2 - 7.0.3
+## 7.0.2
 
 * Move PrometheusMultiplePodScrapes to prometheus-kubernetes-rules chart
 
@@ -43,7 +19,7 @@
 * Respect alert-service and alert-tier pod labels in PrometheusMultiplePodScrapes alert
 
 ## 6.3.1
-
+
 * switch swift user for OpenstackSeed
 
 ## 6.3.0
