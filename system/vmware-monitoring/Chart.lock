@@ -4,9 +4,9 @@ dependencies:
   version: 7.1.0
 - name: thanos
   repository: file://../../common/thanos
-  version: 1.1.0
+  version: 0.2.0
 - name: owner-info
   repository: https://charts.eu-de-2.cloud.sap
   version: 0.1.2
-digest: sha256:a2aef9ba0bba8d16a2b1e6b36a8b8b9fffd71d0a344374e276442d76e9e4feef
-generated: "2022-11-08T12:14:29.241501+01:00"
+digest: sha256:e7e3370ca316b8df74831ca705856bea52fbe65011a04d2fde0a5fa0ea475781
+generated: "2022-11-09T13:21:49.045597+01:00"
