@@ -37,7 +37,15 @@ thanos-{{- $name -}}
 {{- if and $root.Values.ingress.hosts $root.Values.ingress.hostsFQDN -}}
 {{- fail ".Values.ingress.hosts and .Values.ingress.hostsFQDN are mutually exclusive." -}}
 {{- end -}}
+{{- if $root.Values.ingress.hosts -}}
+{{- $firstHost := first $root.Values.ingress.hosts -}}
+{{- required ".Values.ingress.hosts must have at least one hostname set" $firstHost -}}.{{- required ".Values.global.region missing" $root.Values.global.region -}}.{{- required ".Values.global.domain missing" $root.Values.global.domain -}}
+{{- else if $root.Values.ingress.hostsFQDN -}}
+{{- $firstHost := first $root.Values.ingress.hostsFQDN -}}
+{{- required ".Values.ingress.hostsFQDN must have at least one hostname set" $firstHost -}}
+{{- else -}}
 thanos-{{- $name -}}.{{- required "$root.Values.global.region missing" $root.Values.global.region -}}.{{- required "$root.Values.global.tld missing" $root.Values.global.tld -}}
+{{- end -}}
 {{- end -}}
 
 {{/* External gRPC URL of this Thanos. */}}
