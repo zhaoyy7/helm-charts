@@ -1,0 +1,22 @@
+{{- if .Values.nova_bigvm_enabled -}}
+kind: Service
+apiVersion: v1
+
+metadata:
+  name: nova-bigvm-exporter
+  labels:
+    system: openstack
+    type: exporter
+    component: nova
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: {{ required ".Values.nova_bigvm_exporter_port" .Values.nova_bigvm_exporter_port | quote }}
+    prometheus.io/targets: {{ required ".Values.alerts.prometheus missing" .Values.alerts.prometheus | quote }}
+
+spec:
+  selector:
+    name: nova-bigvm
+  ports:
+    - name: bigvm-exporter
+      port: {{ required ".Values.nova_bigvm_exporter_port" .Values.nova_bigvm_exporter_port }}
+{{- end }}
