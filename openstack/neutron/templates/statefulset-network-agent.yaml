@@ -101,10 +101,32 @@ spec:
               value: "ignore:Unverified HTTPS request"
           readinessProbe:
             exec:
-              command: ["neutron-dhcp-readiness", "-config-file", "/etc/neutron/neutron.conf"]
-            initialDelaySeconds: 30
-            periodSeconds: 60
+              command:
+              - python
+              - -c
+              - |
+                import os
+                import requests
+
+                PROMETHEUS = "http://prometheus-openstack.prometheus-openstack:9090"
+                QUERY = """
+                    openstack_subnets_with_dhcp_ip_allocation{network_host="%s"}
+                        unless on(network_id, network_host)
+                    label_replace(label_replace(neutron_agent_checks_netns_present, "network_host", "$1", "hostname", "(.*)"), "network_id", "$1", "netns", "(.*)")
+                """
+                response =requests.get(PROMETHEUS + "/api/v1/query", params={"query": QUERY % os.uname()[1]}) 
+                if  response.status_code != 200:
+                    print(f"Error while running prometheus query: {response.json()}")
+                    exit(1)
+                data = response.json().get("data", {}).get("result", [])
+                if len(data) != 0:
+                    nets = [x["metric"]["network_id"] for x in data]
+                    print(f"{len(data)} unsynced network namespaces: {nets}")
+                    exit(2)
+            initialDelaySeconds: 20
+            periodSeconds: 15
             timeoutSeconds: 10
+            successThreshold: 2
           securityContext:
             privileged: true
           resources:
@@ -247,10 +269,32 @@ spec:
               value: "ignore:Unverified HTTPS request"
           readinessProbe:
             exec:
-              command: ["neutron-linuxbridge-readiness", "-config-file", "/etc/neutron/neutron.conf"]
-            initialDelaySeconds: 30
-            periodSeconds: 60
+              command:
+              - python
+              - -c
+              - |
+                import os
+                import requests
+
+                PROMETHEUS = "http://prometheus-openstack.prometheus-openstack:9090"
+                QUERY = """
+                  sum(openstack_subnets_with_dhcp_ip_allocation{network_host="%s"}) by (bridge, network_host)
+                    unless on(bridge, network_host)
+                  label_replace(neutron_agent_checks_linux_bridge_present, "network_host", "$1", "hostname", "(.*)")
+                """
+                response =requests.get(PROMETHEUS + "/api/v1/query", params={"query": QUERY % os.uname()[1]}) 
+                if  response.status_code != 200:
+                    print(f"Error while running prometheus query: {response.json()}")
+                    exit(1)
+                data = response.json().get("data", {}).get("result", [])
+                if len(data) != 0:
+                    nets = [x["metric"]["bridge"] for x in data]
+                    print(f"{len(data)} unsynced bridges: {nets}")
+                    exit(2)
+            initialDelaySeconds: 20
+            periodSeconds: 15
             timeoutSeconds: 10
+            successThreshold: 2
           securityContext:
             capabilities:
               add:
