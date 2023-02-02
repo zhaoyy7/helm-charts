@@ -6,6 +6,7 @@ global:
   cluster: x-regionOne
 
 prometheus-server:
+  name: ci-test-name
   client_key: whatever
   client_cert: some_cert
   ca_crt: some_ca
