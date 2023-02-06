@@ -36,6 +36,7 @@ spec:
         effect: "NoSchedule"
       nodeSelector:
         species: hypervisor
+{{- if not .Values.hypervisor_on_host }}
       initContainers:
       - name: fix-permssion-instance-volume
         image: {{ required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/library/busybox
@@ -47,12 +48,12 @@ spec:
         image: {{ required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/library/busybox
         command:
         - modprobe
-        - openvswitch
         - kvm
         volumeMounts:
         - mountPath: /lib/modules
           name: modules
           readOnly: true
+{{- end }}
       containers:
         - name: nova-compute
           image: {{ tuple . "compute" | include "container_image_nova" }}
@@ -87,6 +88,7 @@ spec:
           - mountPath: /var/lib/nova/.nova
             name: hypervisor-config
             readOnly: true
+{{- if not .Values.hypervisor_on_host }}
         - name: nova-libvirt
           image: {{ tuple . "libvirt" | include "container_image_nova" }}
           imagePullPolicy: IfNotPresent
@@ -123,7 +125,6 @@ spec:
             readOnly: true
           - mountPath: /container.init
             name: nova-container-init
-            defaultMode: 0777
         - name: nova-virtlog
           image: {{ tuple . "libvirt" | include "container_image_nova" }}
           imagePullPolicy: IfNotPresent
@@ -169,61 +170,9 @@ spec:
             readOnly: true
           - mountPath: /container.init
             name: nova-container-init
-            defaultMode: 0777
-        - name: neutron-openvswitch-agent
-          image: {{ required ".Values.global.registry is missing" .Values.global.registry}}/loci-neutron:{{.Values.imageVersionNeutron | required "Please set nova.imageVersionNeutron or similar" }}
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            privileged: true
-          command:
-          - "bash"
-          - "/container.init/neutron-openvswitch-agent-start"
-          env:
-          volumeMounts:
-          - mountPath: /neutron-etc
-            name: neutron-etc
-          - mountPath: /container.init
-            name: nova-container-init
-            defaultMode: 0777
-          - mountPath: /var/run
-            name: run
-          - mountPath: /lib/modules
-            name: modules
-            readOnly: true
-        - name: ovs
-          image: {{ required ".Values.global.registry is missing" .Values.global.registry}}/loci-neutron-openvswitch:{{.Values.imageVersionNeutron | required "Please set nova.imageVersionNeutron or similar" }}
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            privileged: true
-          command:
-          - /container.init/neutron-ovs-start
-          env:
-          {{- include "k8s_entrypoint_env" . | indent 10 }}
-          volumeMounts:
-          - mountPath: /var/run
-            name: run
-          - mountPath: /lib/modules
-            name: modules
-            readOnly: true
-          - mountPath: /container.init
-            name: nova-container-init
-            defaultMode: 0777
-        - name: ovs-db
-          image: {{ required ".Values.global.registry is missing" .Values.global.registry}}/loci-neutron-openvswitch:{{.Values.imageVersionNeutron | required "Please set nova.imageVersionNeutron or similar" }}
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            privileged: true
-          command:
-          - /container.init/neutron-ovs-db-start
-          env:
-          {{- include "k8s_entrypoint_env" . | indent 10 }}
-          volumeMounts:
-          - mountPath: /var/run
-            name: run
-          - mountPath: /container.init
-            name: nova-container-init
-            defaultMode: 0777
+{{- end }}
       volumes:
+{{- if not .Values.hypervisor_on_host }}
       - name: instances
         persistentVolumeClaim:
           claimName: nova-kvm-shared
@@ -236,22 +185,30 @@ spec:
       - name: modules
         hostPath:
           path: /lib/modules
+      - name: etclibvirt
+        emptyDir: {}
+{{- else }}
+      - name: instances
+        hostPath:
+          path: /var/lib/nova/instances
+      - name: libvirt
+        hostPath:
+          path: /var/lib/libvirt
+      - name: run
+        hostPath:
+          path: /run
+{{- end }}
       - name: cgroup
         hostPath:
           path: /sys/fs/cgroup
       - name: hypervisor-config
         configMap:
           name: nova-compute-kvm
-      - name: etclibvirt
-        emptyDir: {}
       - name: etcnova
         emptyDir: {}
       - name: nova-etc
         configMap:
           name: nova-etc
-      - name: neutron-etc
-        configMap:
-          name: neutron-etc
       - name: nova-container-init
         configMap:
           name: nova-bin
