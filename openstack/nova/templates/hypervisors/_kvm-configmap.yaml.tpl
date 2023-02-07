@@ -60,6 +60,11 @@ data:
     [glance]
     valid_interfaces = public
 
+    {{- if $hypervisor.config_file }}
+    {{"\n"}}
+    {{- include "util.helpers.valuesToIni" $hypervisor.config_file | indent 4 }}
+    {{- end }}
+
   libvirtd.conf: |
     listen_tcp = 1
     listen_tls = 0
