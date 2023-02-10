@@ -40,7 +40,7 @@ spec:
       initContainers:
       - name: fix-permssion-instance-volume
         image: {{ required ".Values.global.dockerHubMirror is missing" .Values.global.dockerHubMirror }}/library/busybox
-        command: ["sh", "-c", "chown -R 42436:42436 /var/lib/nova"]
+        command: ["sh", "-c", "chown -R 42424:42424 /var/lib/nova/instances"]
         volumeMounts:
         - mountPath: /var/lib/nova/instances
           name: instances
@@ -60,6 +60,8 @@ spec:
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
+            runAsUser: 42436 # 42424
+            runAsGroup: 42436 # 42424
           command:
           - "nova-compute"
           env:
@@ -170,6 +172,10 @@ spec:
             readOnly: true
           - mountPath: /container.init
             name: nova-container-init
+          - mountPath: /sys
+            name: sys
+          - mountPath: /etc/multipath
+            name: multipath-etc
 {{- end }}
       volumes:
 {{- if not .Values.hypervisor_on_host }}
@@ -198,9 +204,12 @@ spec:
         hostPath:
           path: /run
 {{- end }}
-      - name: cgroup
+      - name: sys
         hostPath:
-          path: /sys/fs/cgroup
+          path: /sys
+      - name: multipath-etc
+        hostPath:
+          path: /etc/multipath
       - name: hypervisor-config
         configMap:
           name: nova-compute-kvm

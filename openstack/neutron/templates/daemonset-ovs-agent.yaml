@@ -112,9 +112,6 @@ spec:
       - name: modules
         hostPath:
           path: /lib/modules
-      - name: cgroup
-        hostPath:
-          path: /sys/fs/cgroup
       - name: neutron-etc
         configMap:
           name: neutron-etc

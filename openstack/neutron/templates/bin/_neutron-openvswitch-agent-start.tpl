@@ -13,21 +13,6 @@ function process_config {
     cp /neutron-etc/neutron-policy.json  /etc/neutron/policy.json
 }
 
-
-function _start_application {
-    # TODO: Move to image
-    apt update
-    apt install -y openvswitch-switch
-
-    until ! pgrep -f /var/lib/openstack/bin/neutron-openvswitch-agent; do
-      echo "Waiting to be the only highlander"
-      sleep 5
-    done
-
-    exec neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini
-}
-
-
 process_config
 
-start_application
+exec neutron-openvswitch-agent --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini

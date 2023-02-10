@@ -40,9 +40,9 @@ vni_ranges = 10000:20000
 
 
 [securitygroup]
-firewall_driver = iptables_hybrid
-enable_security_group=True
-enable_ipset=True
+{{- range $key, $value := .Values.securitygroup }}
+{{ $key }} = {{ $value }}
+{{- end }}
 
 [agent]
 polling_interval=5
