@@ -24,12 +24,6 @@ data:
     [libvirt]
     connection_uri = "qemu:///system"
     volume_use_multipath = True
-    #inject_key=True
-    #inject_password = True
-    #live_migration_downtime = 500
-    #live_migration_downtime_steps = 10
-    #live_migration_downtime_delay = 75
-    #live_migration_flag = VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_LIVE, VIR_MIGRATE_TUNNELLED
 
     [keystone_authtoken]
     www_authenticate_uri = https://{{include "keystone_api_endpoint_host_public" .}}/v3

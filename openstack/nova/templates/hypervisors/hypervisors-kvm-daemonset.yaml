@@ -90,6 +90,15 @@ spec:
           - mountPath: /var/lib/nova/.nova
             name: hypervisor-config
             readOnly: true
+          - mountPath: /var/lib/nova/mnt
+            mountPropagation: Bidirectional
+            name: mnt
+          - mountPath: /var/lib/nfs
+            name: nfs
+          - mountPath: /sys
+            name: sys
+          - mountPath: /etc/multipath
+            name: multipath-etc
 {{- if not .Values.hypervisor_on_host }}
         - name: nova-libvirt
           image: {{ tuple . "libvirt" | include "container_image_nova" }}
@@ -172,10 +181,6 @@ spec:
             readOnly: true
           - mountPath: /container.init
             name: nova-container-init
-          - mountPath: /sys
-            name: sys
-          - mountPath: /etc/multipath
-            name: multipath-etc
 {{- end }}
       volumes:
 {{- if not .Values.hypervisor_on_host }}
@@ -204,12 +209,23 @@ spec:
         hostPath:
           path: /run
 {{- end }}
+      - name: mnt
+{{- if not .Values.hypervisor_on_host }}
+        emptyDir:
+          medium: Memory
+{{- else }}
+        hostPath:
+          path: /var/lib/nova/mnt
+{{- end }}
       - name: sys
         hostPath:
           path: /sys
       - name: multipath-etc
         hostPath:
           path: /etc/multipath
+      - name: nfs
+        hostPath:
+          path: /var/lib/nfs
       - name: hypervisor-config
         configMap:
           name: nova-compute-kvm
