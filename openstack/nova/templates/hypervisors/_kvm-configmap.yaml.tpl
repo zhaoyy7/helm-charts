@@ -21,10 +21,6 @@ data:
     # Needs to be same on hypervisor and scheduler
     track_instance_changes = {{ .Values.scheduler.track_instance_changes }}
 
-    [libvirt]
-    connection_uri = "qemu:///system"
-    volume_use_multipath = True
-
     [keystone_authtoken]
     www_authenticate_uri = https://{{include "keystone_api_endpoint_host_public" .}}/v3
     auth_url = https://{{include "keystone_api_endpoint_host_public" .}}/v3
