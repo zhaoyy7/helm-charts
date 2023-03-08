@@ -65,7 +65,7 @@ spec:
             name: neutron-etc
           - mountPath: /container.init
             name: neutron-container-init
-          - mountPath: /var/run
+          - mountPath: /run
             name: run
           - mountPath: /lib/modules
             name: modules
@@ -79,7 +79,7 @@ spec:
           command:
           - /container.init/neutron-ovs-start
           volumeMounts:
-          - mountPath: /var/run
+          - mountPath: /run
             name: run
           - mountPath: /lib/modules
             name: modules
@@ -95,7 +95,7 @@ spec:
           - /container.init/neutron-ovs-db-start
           env:
           volumeMounts:
-          - mountPath: /var/run
+          - mountPath: /run
             name: run
           - mountPath: /container.init
             name: neutron-container-init
