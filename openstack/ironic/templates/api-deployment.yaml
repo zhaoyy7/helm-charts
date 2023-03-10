@@ -34,6 +34,9 @@ spec:
     spec:
 {{ tuple . "ironic" "api" | include "kubernetes_pod_anti_affinity" | indent 6 }}
       {{- include "utils.proxysql.pod_settings" . | indent 6 }}
+      securityContext:
+        fsGroup: 42424
+        fsGroupChangePolicy: "OnRootMismatch"
       containers:
       - name: ironic-api
         image: {{ .Values.global.registry }}/loci-ironic:{{ .Values.imageVersion }}
@@ -41,8 +44,11 @@ spec:
         resources:
 {{ toYaml .Values.pod.resources.api | indent 10 }}
         command:
-          - dumb-init
-          - kubernetes-entrypoint
+        - dumb-init
+        - kubernetes-entrypoint
+        securityContext:
+          runAsUser: 42424
+          runAsGroup: 42424
         env:
         - name: COMMAND
           value: "ironic-api"
@@ -65,6 +71,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        {{- tuple . "ironic-api" | include "utils.env.pyroscope" | indent 8 }}
         lifecycle:
           preStop:
             {{- include "utils.snippets.pre_stop_graceful_shutdown" . | indent 12 }}

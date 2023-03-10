@@ -35,6 +35,9 @@ spec:
     spec:
 {{ tuple . "ironic" "inspector" | include "kubernetes_pod_anti_affinity" | indent 6 }}
       {{- include "utils.proxysql.pod_settings" . | indent 6 }}
+      securityContext:
+        fsGroup: 42424
+        fsGroupChangePolicy: "OnRootMismatch"
       containers:
       - name: ironic-inspector
         {{- if .Values.oslo_metrics.enabled }}
@@ -47,6 +50,8 @@ spec:
         - dumb-init
         - kubernetes-entrypoint
         securityContext:
+          runAsUser: 42424
+          runAsGroup: 42424
           capabilities:
             add:
               - NET_ADMIN
@@ -68,6 +73,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        {{- tuple . "ironic-inspector" | include "utils.env.pyroscope" | indent 8 }}
         lifecycle:
           preStop:
             {{- include "utils.snippets.pre_stop_graceful_shutdown" . | indent 12 }}
