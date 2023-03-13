@@ -88,7 +88,7 @@ nginx:
 
 postgresql:
   imageTag: '12.13'
-  postgresDatabase: grafana
+  postgresDatabase: plutono
   postgresUser: postgres
   postgresPassword: '@/cc/secrets'
   persistence:

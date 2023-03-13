@@ -61,7 +61,8 @@ spec:
           mountPath: /tmp/git
       containers:
         - name: "grafana"
-          image: {{ .Values.global.dockerHubMirror | required ".Values.global.dockerHubMirror is missing" }}/{{.Values.grafana.image}}:{{.Values.grafana.image_version}}
+          image: keppel.eu-de-1.cloud.sap/ccloud-ghcr-io-mirror/credativ/plutono@sha256:29acb2eb4b7c1d429936550488d232806457ebad5733b91122ac735ba16430bf
+          # image: {{ .Values.global.dockerHubMirror | required ".Values.global.dockerHubMirror is missing" }}/{{.Values.grafana.image}}:{{.Values.grafana.image_version}}
           imagePullPolicy: {{.Values.image.pullPolicy}}
           command:
             - /bin/bash
@@ -70,8 +71,8 @@ spec:
             # - sleep inf
             - /grafana-bin/grafana-start
           env:
-            - name: GF_PATHS_PROVISIONING
-              value: "/var/lib/grafana/provisioning"
+            - name: PL_PATHS_PROVISIONING
+              value: "/var/lib/plutono/provisioning"
           ports:
             - name: nodejs
               containerPort: 3000
@@ -93,12 +94,12 @@ spec:
             limits:
               memory: "500Mi"
               cpu: "250m"
-          livenessProbe:
-            httpGet:
-              path: /login
-              port: 3000
-            initialDelaySeconds: 120
-            periodSeconds: 30
+          # livenessProbe:
+          #   httpGet:
+          #     path: /login
+          #     port: 3000
+          #   initialDelaySeconds: 120
+          #   periodSeconds: 30
         - name: "gitsync"
           image: {{.Values.global.registry}}/git-sync:v3.1.6
           imagePullPolicy: {{.Values.image.pullPolicy}}

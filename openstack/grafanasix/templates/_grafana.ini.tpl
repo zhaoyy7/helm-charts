@@ -13,15 +13,15 @@
 [paths]
 # Path to where grafana can store temp files, sessions, and the sqlite3 db (if that is used)
 #
-data = /var/lib/grafana
+data = /var/lib/plutono
 #
 # Directory where grafana can store logs
 #
-;logs = /var/log/grafana
+;logs = /var/log/plutono
 #
 # Directory where grafana will automatically scan and look for plugins
 #
-plugins = /var/lib/grafana/plugins
+plugins = /var/lib/plutono/plugins
 
 #
 #################################### Server ####################################
@@ -71,7 +71,7 @@ password={{.Values.postgresql.postgresPassword}}
 
 ssl_mode=disable
 #type=sqlite3
-#path=/etc/grafana/grafana.db
+#path=/etc/plutono/plutono.db
 
 #################################### Session ####################################
 [session]
@@ -85,11 +85,11 @@ provider = postgres
 # redis: config like redis server e.g. `addr=127.0.0.1:6379,pool_size=100,db=grafana`
 # mysql: go-sql-driver/mysql dsn config string, e.g. `user:password@tcp(127.0.0.1:3306)/database_name`
 #;provider_config = sessions
-provider_config = user={{.Values.postgresql.postgresUser}} password={{.Values.postgresql.postgresPassword}} host={{.Release.Name}}-pgsql.{{.Release.Namespace}} port=5432 dbname=grafana sslmode=disable
+provider_config = user={{.Values.postgresql.postgresUser}} password={{.Values.postgresql.postgresPassword}} host={{.Release.Name}}-pgsql.{{.Release.Namespace}} port=5432 dbname=plutono sslmode=disable
 #provider_config = .
 
 # Session cookie name
-;cookie_name = grafana_sess
+;cookie_name = plutono_sess
 
 # If you use session in https only, default is false
 ;cookie_secure = false
@@ -111,8 +111,8 @@ admin_password = {{.Values.grafana.admin.password}}
 
 # Auto-login remember days
 ;login_remember_days = 7
-;cookie_username = grafana_user
-;cookie_remember_name = grafana_remember
+;cookie_username = plutono_user
+;cookie_remember_name = plutono_remember
 
 # disable gravatar profile images
 ;disable_gravatar = false
