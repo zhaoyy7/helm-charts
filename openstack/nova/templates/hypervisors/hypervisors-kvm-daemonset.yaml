@@ -60,14 +60,19 @@ spec:
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
-            runAsUser: 42436 # 42424
-            runAsGroup: 42436 # 42424
+            runAsUser: 42424
+            runAsGroup: 42424
           lifecycle:
             postStart:
               exec:
-               command: ["/bin/bash", "-c", "chmod 0755 /usr/local/sbin/*"]
+               command:
+               - /bin/bash
+               - -c
+               - |
+                 chmod 0755 /usr/local/sbin/*
           command:
-          - "nova-compute"
+          - "sleep"
+          - "inf"
           env:
           {{- if .Values.sentry.enabled }}
           - name: SENTRY_DSN
@@ -89,10 +94,22 @@ spec:
           - mountPath: /run
             name: run
           - mountPath: /etc/nova
+            name: etcnova
+          - mountPath: /etc/nova/nova.conf
             name: nova-etc
+            subPath: nova.conf
             readOnly: true
-          - mountPath: /var/lib/nova/.nova
+          - mountPath: /etc/nova/logging.ini
+            name: nova-etc
+            subPath: logging.ini
+            readOnly: true
+          - mountPath: /etc/nova/rootwrap.conf
+            name: nova-etc
+            subPath: rootwrap.conf
+            readOnly: true
+          - mountPath: /etc/nova/nova-compute.conf
             name: hypervisor-config
+            subPath: nova-compute.conf
             readOnly: true
           - mountPath: /var/lib/nova/mnt
             mountPropagation: Bidirectional
@@ -136,9 +153,6 @@ spec:
           - mountPath: /etc/nova
             name: nova-etc
             readOnly: true
-          - mountPath: /var/lib/nova/.nova
-            name: hypervisor-config
-            readOnly: true
           - mountPath: /etc/libvirt
             name: etclibvirt
           - mountPath: /etc/libvirt/libvirtd.conf
@@ -169,21 +183,7 @@ spec:
             name: libvirt
           - mountPath: /var/run
             name: run
-          - mountPath: /etc/nova
-            name: etcnova
-          - mountPath: /etc/nova/nova.conf
-            name: nova-etc
-            subPath: nova.conf
-            readOnly: true
           {{- /* Note I533984: Replace with plain policy.yaml after Xena upgrade */}}
-          - mountPath: /etc/nova/{{if (.Values.imageVersion | hasPrefix "rocky") }}policy.json{{else}}policy.yaml{{end}}
-            name: nova-etc
-            subPath: {{if (.Values.imageVersion | hasPrefix "rocky") }}policy.json{{else}}policy.yaml{{end}}
-            readOnly: true
-          - mountPath: /etc/nova/logging.ini
-            name: nova-etc
-            subPath: logging.ini
-            readOnly: true
           - mountPath: /etc/libvirt
             name: etclibvirt
           - mountPath: /etc/libvirt/libvirtd.conf
