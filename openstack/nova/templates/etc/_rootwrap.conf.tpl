@@ -25,3 +25,4 @@ syslog_log_facility=syslog
 # INFO means log all usage
 # ERROR means only log unsuccessful attempts
 syslog_log_level=ERROR
+

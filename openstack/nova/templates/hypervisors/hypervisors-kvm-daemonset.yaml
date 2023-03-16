@@ -61,7 +61,7 @@ spec:
           securityContext:
             privileged: true
             runAsUser: 42424
-            runAsGroup: 42424
+            runAsGroup: 477
           lifecycle:
             postStart:
               exec:
