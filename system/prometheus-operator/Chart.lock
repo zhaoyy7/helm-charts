@@ -1,12 +1,12 @@
 dependencies:
 - name: prometheus-crds
-  repository: https://charts.eu-de-2.cloud.sap
-  version: 4.0.0
+  repository: file://../prometheus-crds
+  version: 5.0.0
 - name: kube-prometheus-stack
   repository: https://prometheus-community.github.io/helm-charts
   version: 42.2.1
 - name: owner-info
   repository: https://charts.eu-de-2.cloud.sap
   version: 0.2.0
-digest: sha256:086a52dcc731107842ec31c5feb4ba4726a6845ecb4afc982c43c6940095a1ae
-generated: "2022-12-07T15:15:51.108111+01:00"
+digest: sha256:39bac0c6487967fb5bcb7538c9b66d5b58363c61d871fb71ed0c4c341f025152
+generated: "2023-03-16T14:21:42.648636+01:00"
