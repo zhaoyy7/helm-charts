@@ -11,6 +11,12 @@ Common labels
 {{- define "statsd-exporter.labels" -}}
 app.kubernetes.io/name: {{ include "statsd-exporter.fullName" . }}
 app.kubernetes.io/component: prometheus-exporter
+{{- if .Chart.appVersion }}
+app.kubernetes.io/version: {{ .Chart.appVersion | quote }}
+{{- else }}
+app.kubernetes.io/version: {{ .Chart.version | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
