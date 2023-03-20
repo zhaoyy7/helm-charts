@@ -107,9 +107,17 @@ spec:
             name: nova-etc
             subPath: rootwrap.conf
             readOnly: true
+          - mountPath: /etc/nova/rootwrap.conf.d/network.filters
+            name: nova-etc
+            subPath: network.filters
+            readOnly: true
           - mountPath: /etc/nova/nova-compute.conf
             name: hypervisor-config
             subPath: nova-compute.conf
+            readOnly: true
+          - mountPath: /etc/sudoers.d/nova
+            name: nova-etc
+            subPath: sudoers-nova
             readOnly: true
           - mountPath: /var/lib/nova/mnt
             mountPropagation: Bidirectional
