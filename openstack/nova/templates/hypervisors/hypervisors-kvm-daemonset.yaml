@@ -71,8 +71,7 @@ spec:
                - |
                  chmod 0755 /usr/local/sbin/*
           command:
-          - "sleep"
-          - "inf"
+          - "nova-compute"
           env:
           {{- if .Values.sentry.enabled }}
           - name: SENTRY_DSN
