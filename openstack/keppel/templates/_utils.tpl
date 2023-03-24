@@ -49,6 +49,11 @@
 - name:  KEPPEL_BURST_MANIFEST_PUSHES
   value: '15'   # per account
 {{- if .Values.keppel.clair.hostname }}
+- name:  KEPPEL_CLAIR_NOTIFICATION_SECRET
+  valueFrom:
+    secretKeyRef:
+      name: keppel-secret
+      key: clair_notification_secret
 - name:  KEPPEL_CLAIR_PRESHARED_KEY
   valueFrom:
     secretKeyRef:
